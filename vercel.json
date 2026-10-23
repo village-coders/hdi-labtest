@@ -3,11 +3,11 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://api.yourdomain.com/api/$1"
+      "destination": "https://labtest-api.hdiportal.com/api/$1"
     },
     {
       "source": "/uploads/(.*)",
-      "destination": "https://api.yourdomain.com/uploads/$1"
+      "destination": "https://labtest-api.hdiportal.com/uploads/$1"
     },
     {
       "source": "/(.*)",
