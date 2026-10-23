@@ -73,6 +73,7 @@ const MainPortal: React.FC = () => {
   const [selectedSample, setSelectedSample] = useState<Sample | null>(null);
   const [detailInitialTab, setDetailInitialTab] = useState<'details' | 'actions' | 'chat'>('details');
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   // Companies Menu State
   const [showAddCompanyCard, setShowAddCompanyCard] = useState(false);
@@ -201,18 +202,31 @@ const MainPortal: React.FC = () => {
 
   return (
     <div className="app-container">
+      {/* Mobile Drawer Backdrop Overlay */}
+      <div
+        className={`sidebar-overlay ${isMobileSidebarOpen ? 'active' : ''}`}
+        onClick={() => setIsMobileSidebarOpen(false)}
+        aria-hidden="true"
+      />
+
       {/* Sidebar */}
       <Sidebar
         currentTab={effectiveTab}
         setCurrentTab={(tab) => {
+          setIsMobileSidebarOpen(false);
           if (tab === 'notifications') {
             setIsNotificationsOpen(true);
           } else {
             setCurrentTab(tab);
           }
         }}
-        openRegisterModal={() => setIsRegisterOpen(true)}
+        openRegisterModal={() => {
+          setIsMobileSidebarOpen(false);
+          setIsRegisterOpen(true);
+        }}
         unreadAlertsCount={notificationLogs.length}
+        isMobileOpen={isMobileSidebarOpen}
+        onCloseMobile={() => setIsMobileSidebarOpen(false)}
       />
 
       {/* Main View Area */}
@@ -278,6 +292,7 @@ const MainPortal: React.FC = () => {
           onOpenNotifications={() => setIsNotificationsOpen(true)}
           unreadCount={notificationLogs.length}
           onRefreshData={loadData}
+          onToggleMobileSidebar={() => setIsMobileSidebarOpen((prev) => !prev)}
         />
 
         <main className="page-body">
@@ -425,7 +440,7 @@ const MainPortal: React.FC = () => {
                       <h4 style={{ margin: '0 0 14px 0', fontSize: '14px', fontWeight: 800, color: '#1e40af', display: 'flex', alignItems: 'center', gap: 6 }}>
                         <Building2 size={16} /> Register New Client Company
                       </h4>
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))', gap: 12 }}>
                         <div>
                           <label className="form-label" style={{ fontSize: '12px', marginBottom: 4 }}>
                             Company Name <span className="required-star">*</span>
@@ -521,7 +536,7 @@ const MainPortal: React.FC = () => {
                       <p style={{ margin: 0, fontWeight: 600 }}>No companies matched your search criteria.</p>
                     </div>
                   ) : (
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))', gap: 14 }}>
                       {companies
                         .filter((c) =>
                           c.name.toLowerCase().includes(compSearchQuery.toLowerCase()) ||

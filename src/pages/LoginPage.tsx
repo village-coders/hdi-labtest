@@ -88,13 +88,14 @@ export const LoginPage: React.FC = () => {
     <div
       style={{
         minHeight: '100vh',
+        height: '100%',
         background: '#ffffff',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         padding: '24px 16px',
         position: 'relative',
-        overflow: 'hidden',
+        overflow: 'auto',
       }}
     >
       <style>{`
@@ -119,6 +120,19 @@ export const LoginPage: React.FC = () => {
           }
           .login-form-panel {
             padding: 36px 24px !important;
+            min-height: auto !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .login-card {
+            border-radius: 14px !important;
+            max-width: 100% !important;
+          }
+          .login-brand-panel {
+            padding: 24px 18px !important;
+          }
+          .login-form-panel {
+            padding: 28px 18px !important;
           }
         }
       `}</style>
@@ -288,7 +302,7 @@ export const LoginPage: React.FC = () => {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'stretch',
-            minHeight: '520px',
+            minHeight: 'clamp(380px, 60vh, 520px)',
           }}
         >
           <div style={{ maxWidth: '380px', width: '100%', margin: '0 auto' }}>

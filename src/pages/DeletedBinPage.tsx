@@ -197,7 +197,7 @@ export const DeletedBinPage: React.FC<DeletedBinPageProps> = ({ onRefreshData })
             placeholder="Search by code, name, client, lab..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ paddingLeft: 36, fontSize: '13px' }}
+            style={{ paddingLeft: 36, fontSize: '13px', width: '100%' }}
           />
         </div>
 

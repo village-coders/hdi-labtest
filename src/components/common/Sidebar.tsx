@@ -20,6 +20,7 @@ import {
   AlertOctagon,
   MessageSquare,
   Trash2,
+  X,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.js';
 
@@ -28,6 +29,8 @@ interface SidebarProps {
   setCurrentTab: (tab: string) => void;
   openRegisterModal: () => void;
   unreadAlertsCount?: number;
+  isMobileOpen?: boolean;
+  onCloseMobile?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -35,6 +38,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   setCurrentTab,
   openRegisterModal,
   unreadAlertsCount = 0,
+  isMobileOpen = false,
+  onCloseMobile,
 }) => {
   const { user, logout } = useAuth();
   const isSuperAdmin = user?.role === 'SUPER_ADMIN';
@@ -80,6 +85,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     if (id === 'applications' || id === 'registry' || id === 'samples') setCurrentTab('registered-samples');
     else if (id === 'certificates') setCurrentTab('reports');
     else setCurrentTab(id);
+    if (onCloseMobile) onCloseMobile();
   };
 
   // Determine active item
@@ -101,10 +107,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <aside
-      className="sidebar"
+      className={`sidebar ${isMobileOpen ? 'sidebar-open' : ''}`}
       style={{
         width: isCollapsed ? 76 : 240,
-        transition: 'width 0.2s ease',
+        transition: 'width 0.2s ease, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1)',
         background: '#ffffff',
         borderRight: '1px solid #e5e7eb',
         display: 'flex',
@@ -196,33 +202,51 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
           )}
 
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            style={{
-              background: '#f8fafc',
-              border: '1px solid #e2e8f0',
-              borderRadius: 6,
-              width: 24,
-              height: 24,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              color: '#64748b',
-              padding: 0,
-              flexShrink: 0,
-            }}
-            title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
-          >
-            {isCollapsed ? <ChevronRight size={13} /> : <ChevronLeft size={13} />}
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            {/* Mobile close button (shown on mobile/tablet) */}
+            {onCloseMobile && (
+              <button
+                type="button"
+                onClick={onCloseMobile}
+                className="mobile-nav-close"
+                title="Close Navigation Menu"
+              >
+                <X size={16} />
+              </button>
+            )}
+
+            <button
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              style={{
+                background: '#f8fafc',
+                border: '1px solid #e2e8f0',
+                borderRadius: 6,
+                width: 24,
+                height: 24,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                color: '#64748b',
+                padding: 0,
+                flexShrink: 0,
+              }}
+              className="desktop-collapse-btn"
+              title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
+            >
+              {isCollapsed ? <ChevronRight size={13} /> : <ChevronLeft size={13} />}
+            </button>
+          </div>
         </div>
 
         {/* Quick Sample Registration CTA (if admin and not collapsed) */}
         {!isLabUser && !isCollapsed && (
           <div style={{ padding: '12px 14px 6px 14px' }}>
             <button
-              onClick={openRegisterModal}
+              onClick={() => {
+                openRegisterModal();
+                if (onCloseMobile) onCloseMobile();
+              }}
               className="btn btn-primary"
               style={{
                 width: '100%',

@@ -216,7 +216,12 @@ export const CommunicationsPage: React.FC = () => {
 
       {/* ── ADMIN TICKET STATS BAR ── */}
       {isAdmin && !loading && communications.length > 0 && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 18 }}>
+        <div
+          className="responsive-comm-stats"
+          style={{
+            marginBottom: 18,
+          }}
+        >
           {/* Open Tickets */}
           <div
             onClick={() => setStatusFilter(statusFilter === 'OPEN' ? 'ALL' : 'OPEN')}
@@ -321,7 +326,7 @@ export const CommunicationsPage: React.FC = () => {
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
-          minHeight: '620px',
+          minHeight: 'clamp(300px, 60vh, 620px)',
         }}
       >
         {/* Channel Header */}
@@ -573,7 +578,7 @@ export const CommunicationsPage: React.FC = () => {
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: '1.2fr 1fr 1fr',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))',
                 gap: 10,
                 marginBottom: 10,
               }}
@@ -624,7 +629,7 @@ export const CommunicationsPage: React.FC = () => {
             </div>
 
             {/* Main Message Input */}
-            <div style={{ display: 'flex', gap: 10, alignItems: 'flex-end' }}>
+            <div style={{ display: 'flex', gap: 10, alignItems: 'stretch', flexWrap: 'wrap' }}>
               <textarea
                 rows={3}
                 placeholder={
@@ -636,7 +641,8 @@ export const CommunicationsPage: React.FC = () => {
                 onChange={(e) => setMessage(e.target.value)}
                 required
                 style={{
-                  flex: 1,
+                  flex: '1 1 260px',
+                  minWidth: 0,
                   padding: '12px 14px',
                   fontSize: '13.5px',
                   borderRadius: 8,
@@ -664,9 +670,11 @@ export const CommunicationsPage: React.FC = () => {
                   fontSize: '13.5px',
                   display: 'flex',
                   alignItems: 'center',
+                  justifyContent: 'center',
                   gap: 8,
                   cursor: isSending || !message.trim() ? 'not-allowed' : 'pointer',
-                  height: '68px',
+                  minHeight: '44px',
+                  flex: '0 0 auto',
                 }}
               >
                 <Send size={16} />

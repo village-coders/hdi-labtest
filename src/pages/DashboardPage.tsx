@@ -273,13 +273,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       </div>
 
       {/* ── 4 KPI Stat Cards Row (as in reference image) ── */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
-          gap: 16,
-        }}
-      >
+      <div className="responsive-stat-cards">
         {/* Card 1: Registered Samples */}
         <div className="card" style={{ padding: '18px 20px', borderRadius: 14 }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
@@ -415,12 +409,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
       {/* ── Main Two-Column Content Area ── */}
       <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'minmax(0, 1.45fr) minmax(0, 1fr)',
-          gap: 20,
-          alignItems: 'start',
-        }}
+        className="responsive-dashboard-grid"
       >
         {/* ── Left Column: Recent Activities Table ── */}
         <div className="card" style={{ padding: '20px 22px', borderRadius: 14 }}>
@@ -429,10 +418,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: 8,
               marginBottom: 16,
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
               <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', margin: 0 }}>
                 Recent Activities
               </h3>
@@ -701,7 +692,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               </div>
 
               {/* 3 Metric Boxes as in reference image */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 75px), 1fr))', gap: 10 }}>
                 {/* Box 1: Green Active */}
                 <div
                   style={{

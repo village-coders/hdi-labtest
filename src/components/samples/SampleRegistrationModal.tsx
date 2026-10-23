@@ -569,7 +569,7 @@ export const SampleRegistrationModal: React.FC<SampleRegistrationModalProps> = (
             </h3>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 160px), 1fr))', gap: 16 }}>
             {/* 6. Production Date */}
             <div className="form-group">
               <label className="form-label">Production Date</label>
@@ -642,7 +642,7 @@ export const SampleRegistrationModal: React.FC<SampleRegistrationModalProps> = (
             </h3>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))', gap: 16 }}>
             {/* 10. Date of Entry */}
             <div className="form-group">
               <label className="form-label">

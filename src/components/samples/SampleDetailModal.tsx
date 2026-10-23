@@ -906,6 +906,7 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
 
         {/* ── WORKFLOW LIFECYCLE PROGRESSION TRACKER (INTERACTIVE) ── */}
         <div
+          className="touch-scroll-row"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -914,8 +915,10 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
             border: '1px solid #e2e8f0',
             padding: '12px 18px',
             overflowX: 'auto',
+            WebkitOverflowScrolling: 'touch',
             boxShadow: 'var(--shadow-sm)',
             justifyContent: 'space-between',
+            maxWidth: '100%',
           }}
         >
           {steps.map((step, idx) => {
@@ -1164,7 +1167,7 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
         )}
 
         {/* ── MAIN ONE-PAGE CONTENT GRID: 2 BALANCED COLUMNS ── */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(460px, 1fr))', gap: 20 }}>
+        <div className="responsive-modal-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))', gap: 20 }}>
           {/* ════════ LEFT COLUMN: Physical Sample Inspection & Product Specifications ════════ */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
             {/* Physical Sample Inspection Photo Card */}
@@ -1651,7 +1654,7 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
 
             {/* FORM 1: SEND INVOICE */}
             {activeAction === 'SEND_INVOICE' && (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 14 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))', gap: 14 }}>
                 <div>
                   <label className="form-label">Invoice Number *</label>
                   <input
@@ -1759,7 +1762,7 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
 
             {/* FORM 3: ISSUE CERTIFICATE */}
             {activeAction === 'ISSUE_CERTIFICATE' && (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 14 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))', gap: 14 }}>
                 <div>
                   <label className="form-label">Analytical Verdict *</label>
                   <select
@@ -1923,7 +1926,7 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
 
             {/* FORM 7: SEND PAYMENT */}
             {activeAction === 'SEND_PAYMENT' && (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 14 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))', gap: 14 }}>
                 <div>
                   <label className="form-label">Receipt / Bank Reference No. *</label>
                   <input
