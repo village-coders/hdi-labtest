@@ -103,7 +103,7 @@ export const FinanceDeskPage: React.FC<FinanceDeskPageProps> = ({
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))',
           gap: 14,
         }}
       >
@@ -303,7 +303,7 @@ export const FinanceDeskPage: React.FC<FinanceDeskPageProps> = ({
           </div>
 
           {/* Search Box */}
-          <div style={{ position: 'relative', width: 260 }}>
+          <div style={{ position: 'relative', width: 260, maxWidth: '100%', flex: '1 1 200px' }}>
             <Search
               size={14}
               style={{

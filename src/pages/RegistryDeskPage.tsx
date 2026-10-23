@@ -87,7 +87,7 @@ export const RegistryDeskPage: React.FC<RegistryDeskPageProps> = ({
             Primary management desk for registered samples, code generation, external dispatch, and certificates
           </p>
         </div>
-        <button onClick={openRegisterModal} className="btn btn-primary" style={{ background: '#0f172a' }}>
+        <button onClick={openRegisterModal} className="btn btn-primary" style={{ background: '#0f172a', whiteSpace: 'nowrap' }}>
           <PlusCircle size={15} /> Register New Sample
         </button>
       </div>
@@ -104,7 +104,7 @@ export const RegistryDeskPage: React.FC<RegistryDeskPageProps> = ({
           gap: 12,
         }}
       >
-        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+        <div className="touch-scroll-row" style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', overflowX: 'auto', maxWidth: '100%', paddingBottom: 4 }}>
           {[
             { id: 'ALL', label: 'All', count: samples.length },
             { id: 'DISPATCHED', label: 'Sent to Lab', count: samples.filter((s) => s.workflowStatus === 'Sent to Lab').length },
@@ -136,6 +136,7 @@ export const RegistryDeskPage: React.FC<RegistryDeskPageProps> = ({
                   fontWeight: isTabActive ? 700 : 500,
                   fontSize: '11.5px',
                   padding: '4px 10px',
+                  whiteSpace: 'nowrap',
                   border: isRejectedTab && !isTabActive && tab.count > 0 ? '1px solid #fecaca' : 'none',
                 }}
               >
@@ -145,13 +146,13 @@ export const RegistryDeskPage: React.FC<RegistryDeskPageProps> = ({
           })}
         </div>
 
-        <div style={{ position: 'relative', width: 240 }}>
+        <div style={{ position: 'relative', width: 240, maxWidth: '100%', flex: '1 1 200px' }}>
           <Search size={13} color="#94a3b8" style={{ position: 'absolute', left: 10, top: 10 }} />
           <input
             type="text"
             placeholder="Search code, name, batch…"
             className="form-input"
-            style={{ paddingLeft: 30, fontSize: '12px', padding: '6px 10px 6px 30px' }}
+            style={{ paddingLeft: 30, fontSize: '12px', padding: '6px 10px 6px 30px', width: '100%' }}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />

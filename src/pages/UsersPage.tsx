@@ -303,7 +303,7 @@ export const UsersPage: React.FC = () => {
       </div>
 
       {/* Users Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: 16 }}>
         {displayedUsers.map((acc, idx) => {
           const roleBadge = getRoleBadge(acc.role);
           const Icon = roleBadge.icon;

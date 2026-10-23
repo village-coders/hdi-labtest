@@ -9,6 +9,7 @@ import {
   Receipt,
   CreditCard,
   Award,
+  Menu,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.js';
 
@@ -18,6 +19,7 @@ interface NavbarProps {
   onOpenNotifications: () => void;
   unreadCount?: number;
   onRefreshData?: () => void;
+  onToggleMobileSidebar?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -26,6 +28,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenNotifications,
   unreadCount = 0,
   onRefreshData,
+  onToggleMobileSidebar,
 }) => {
   const { user, logout, switchRole, isSuperAdminAsLab } = useAuth();
 
@@ -73,13 +76,25 @@ export const Navbar: React.FC<NavbarProps> = ({
   ];
 
   return (
-    <header className="topbar" style={{ flexWrap: 'wrap', gap: 12, padding: '10px 24px', height: 'auto', minHeight: 64 }}>
-      {/* Left: Branding & Context Title */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+    <header className="topbar">
+      {/* Left: Mobile Menu Toggle + Branding & Context Title */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', minWidth: 0 }}>
+        {onToggleMobileSidebar && (
+          <button
+            type="button"
+            onClick={onToggleMobileSidebar}
+            className="mobile-nav-toggle"
+            aria-label="Open Navigation Menu"
+            title="Open Menu"
+          >
+            <Menu size={20} />
+          </button>
+        )}
+
         <div
           style={{
-            width: 40,
-            height: 40,
+            width: 38,
+            height: 38,
             borderRadius: 10,
             background: '#ffffff',
             border: '1px solid #d4e4d8',
@@ -98,13 +113,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           />
         </div>
 
-        <div>
+        <div style={{ minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-            <h2 style={{ fontSize: '16.5px', fontWeight: 800, color: '#0f172a', margin: 0, letterSpacing: '-0.2px' }}>
+            <h2 className="topbar-title" style={{ fontSize: '16.5px', fontWeight: 800, color: '#0f172a', margin: 0, letterSpacing: '-0.2px' }}>
               {isLabPage ? activeLab.name : 'Sample Registration & Dispatch Portal'}
             </h2>
             {isLabPage ? (
               <span
+                className="topbar-badge"
                 style={{
                   fontSize: '10.5px',
                   fontWeight: 800,
@@ -120,6 +136,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </span>
             ) : (
               <span
+                className="topbar-badge"
                 style={{
                   fontSize: '10.5px',
                   fontWeight: 800,
@@ -135,7 +152,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </span>
             )}
           </div>
-          <p style={{ fontSize: '11.5px', color: '#64748b', margin: '2px 0 0 0' }}>
+          <p className="topbar-subtitle" style={{ fontSize: '11.5px', color: '#64748b', margin: '2px 0 0 0' }}>
             {isLabPage
               ? `Sample Intake, Invoices Desk, Payment Confirmations & Halal CoA Workspace • ${activeLab.email}`
               : 'Central Laboratory Workflow, Finance & Automated Notifications Hub'}
@@ -146,6 +163,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Center: Lab Workflow Quick Tabs (Shown on Lab Pages) */}
       {isLabPage && setCurrentTab && (
         <div
+          className="touch-scroll-row"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -154,6 +172,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             padding: '4px',
             borderRadius: 10,
             border: '1px solid #e2e8f0',
+            maxWidth: '100%',
           }}
         >
           {labTabs.map((t) => {
@@ -188,16 +207,17 @@ export const Navbar: React.FC<NavbarProps> = ({
       )}
 
       {/* Right: Actions, Notifications & Profile */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginLeft: 'auto' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 'auto', flexShrink: 0 }}>
         {/* Quick Refresh */}
         {onRefreshData && (
           <button
             onClick={onRefreshData}
             className="btn btn-secondary btn-sm"
             title="Refresh active records"
+            style={{ padding: '6px 10px' }}
           >
             <RefreshCw size={13} />
-            <span style={{ fontSize: '12px' }}>Refresh</span>
+            <span className="topbar-user-name" style={{ fontSize: '12px' }}>Refresh</span>
           </button>
         )}
 
@@ -205,11 +225,11 @@ export const Navbar: React.FC<NavbarProps> = ({
         <button
           onClick={onOpenNotifications}
           className="btn btn-secondary btn-sm"
-          style={{ position: 'relative' }}
+          style={{ position: 'relative', padding: '6px 10px' }}
           title="View automated workflow notifications"
         >
           <Bell size={14} color="#0f172a" />
-          <span style={{ fontSize: '12px' }}>Notifications</span>
+          <span className="topbar-user-name" style={{ fontSize: '12px' }}>Notifications</span>
           {unreadCount > 0 && (
             <span
               style={{
@@ -228,28 +248,33 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Logged in User Pill */}
         <div
+          className="topbar-user-pill"
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 8,
-            padding: '5px 12px',
+            gap: 6,
+            padding: '5px 10px',
             background: '#f8fafc',
             border: '1px solid #e2e8f0',
             borderRadius: 99,
           }}
+          title={`${user?.name || 'User'} (${user?.role || 'Admin'})`}
         >
           <div
+            className="user-dot"
             style={{
               width: 8,
               height: 8,
               borderRadius: '50%',
               background: user?.role === 'SUPER_ADMIN' ? '#7c3aed' : '#0f172a',
+              flexShrink: 0,
             }}
           />
-          <span style={{ fontSize: '12px', fontWeight: 700, color: '#111827' }}>
+          <span className="topbar-user-name" style={{ fontSize: '12px', fontWeight: 700, color: '#111827' }}>
             {user?.name?.split(' ')[0] || 'User'}
           </span>
           <span
+            className="topbar-badge"
             style={{
               fontSize: '10px',
               fontWeight: 800,
@@ -270,7 +295,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   : user?.role === 'ACCOUNTANT'
                   ? '#b45309'
                   : '#0f172a',
-              padding: '2px 8px',
+              padding: '2px 6px',
               borderRadius: 99,
               border:
                 user?.role === 'SUPER_ADMIN'
@@ -279,7 +304,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }}
           >
             {user?.role === 'SUPER_ADMIN' ? (
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}>
                 <ShieldAlert size={10} color="#7c3aed" />
                 Super Admin
               </span>
@@ -303,16 +328,16 @@ export const Navbar: React.FC<NavbarProps> = ({
               borderColor: '#d8b4fe',
               color: '#7c3aed',
               background: '#faf5ff',
-              fontSize: '11.5px',
+              fontSize: '11px',
               fontWeight: 700,
               display: 'inline-flex',
               alignItems: 'center',
-              gap: 5,
-              padding: '6px 12px',
+              gap: 4,
+              padding: '5px 8px',
             }}
           >
             <ShieldAlert size={13} color="#7c3aed" />
-            <span>Back to Super Admin</span>
+            <span className="topbar-user-name">Back to Super Admin</span>
           </button>
         )}
 
@@ -321,10 +346,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           onClick={logout}
           className="btn btn-secondary btn-sm"
           title="Sign out of portal"
-          style={{ borderColor: '#fecaca', color: '#dc2626', background: '#fff5f5' }}
+          style={{ borderColor: '#fecaca', color: '#dc2626', background: '#fff5f5', padding: '6px 10px' }}
         >
           <LogOut size={13} />
-          <span style={{ fontSize: '12px' }}>Sign Out</span>
+          <span className="topbar-user-name" style={{ fontSize: '12px' }}>Sign Out</span>
         </button>
       </div>
     </header>

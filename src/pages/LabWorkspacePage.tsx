@@ -454,7 +454,7 @@ export const LabWorkspacePage: React.FC<LabWorkspacePageProps> = ({
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 250px), 1fr))', gap: 16 }}>
             {/* Field 1: Target Sample */}
             <div>
               <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#374151', marginBottom: 6 }}>
@@ -609,8 +609,8 @@ export const LabWorkspacePage: React.FC<LabWorkspacePageProps> = ({
           </div>
 
           {/* Search & Filter Bar */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-            <div style={{ position: 'relative', width: 220 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', width: '100%', maxWidth: '100%' }}>
+            <div style={{ position: 'relative', width: 220, maxWidth: '100%', flex: '1 1 180px' }}>
               <Search size={14} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} />
               <input
                 type="text"
@@ -618,7 +618,7 @@ export const LabWorkspacePage: React.FC<LabWorkspacePageProps> = ({
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="form-input"
-                style={{ paddingLeft: 30, fontSize: '12px', height: 34 }}
+                style={{ paddingLeft: 30, fontSize: '12px', height: 34, width: '100%' }}
               />
             </div>
 
@@ -626,7 +626,7 @@ export const LabWorkspacePage: React.FC<LabWorkspacePageProps> = ({
               value={filterNature}
               onChange={(e) => setFilterNature(e.target.value)}
               className="form-select"
-              style={{ fontSize: '12px', height: 34, width: 140 }}
+              style={{ fontSize: '12px', height: 34, width: 140, flex: '0 1 140px' }}
             >
               <option value="">All Categories</option>
               <option value="Food">Food (FD)</option>

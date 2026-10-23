@@ -195,7 +195,7 @@ export const DocumentsPage: React.FC<DocumentsPageProps> = ({
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 150px), 1fr))',
           gap: 14,
         }}
       >
@@ -240,9 +240,9 @@ export const DocumentsPage: React.FC<DocumentsPageProps> = ({
       <div className="card" style={{ padding: '20px 24px', borderRadius: 14 }}>
         {/* Controls Bar */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 16 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', width: '100%', maxWidth: '100%' }}>
             {/* Search */}
-            <div style={{ position: 'relative', width: 240 }}>
+            <div style={{ position: 'relative', width: 240, maxWidth: '100%', flex: '1 1 200px' }}>
               <Search size={14} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} />
               <input
                 type="text"
@@ -250,7 +250,7 @@ export const DocumentsPage: React.FC<DocumentsPageProps> = ({
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="form-input"
-                style={{ paddingLeft: 30, fontSize: '12px', height: 34 }}
+                style={{ paddingLeft: 30, fontSize: '12px', height: 34, width: '100%' }}
               />
             </div>
 
@@ -259,7 +259,7 @@ export const DocumentsPage: React.FC<DocumentsPageProps> = ({
               value={selectedCompany}
               onChange={(e) => setSelectedCompany(e.target.value)}
               className="form-select"
-              style={{ fontSize: '12px', height: 34, width: 190 }}
+              style={{ fontSize: '12px', height: 34, width: 190, maxWidth: '100%', flex: '1 1 160px' }}
             >
               <option value="">All Client Companies</option>
               {companies.map((c) => (
@@ -274,7 +274,7 @@ export const DocumentsPage: React.FC<DocumentsPageProps> = ({
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="form-select"
-              style={{ fontSize: '12px', height: 34, width: 180 }}
+              style={{ fontSize: '12px', height: 34, width: 180, maxWidth: '100%', flex: '1 1 150px' }}
             >
               <option value="">All Document Types</option>
               <option value="CERTIFICATE">Certificates of Analysis</option>
