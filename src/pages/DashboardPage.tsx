@@ -74,45 +74,45 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Compute live metrics or graceful fallback matching the reference dashboard
-  const totalApps = stats?.total && stats.total > 0 ? stats.total : 211;
-  const newApps = stats?.statusCounts['Registered'] || stats?.statusCounts['Received'] || 2;
-  const activeCerts = stats?.statusCounts['Closed'] || stats?.statusCounts['Completed'] || 56;
-  const renewalApps = stats?.statusCounts['In Processing'] || stats?.statusCounts['Sent to Lab'] || 48;
+  // Compute live metrics from real data — no dummy fallbacks
+  const totalApps = stats?.total ?? recentSamples.length;
+  const newApps = (stats?.statusCounts?.['Registered'] ?? 0) + (stats?.statusCounts?.['Received'] ?? 0);
+  const activeCerts = (stats?.statusCounts?.['Closed'] ?? 0) + (stats?.statusCounts?.['Completed'] ?? 0);
+  const renewalApps = (stats?.statusCounts?.['In Processing'] ?? 0) + (stats?.statusCounts?.['Sent to Lab'] ?? 0);
 
-  const approvedCount = activeCerts || 65;
-  const pendingCount = newApps || 2;
-  const rejectedCount = stats?.statusCounts['Rejected'] || 2;
-  const totalDistribution = approvedCount + pendingCount + rejectedCount;
+  const approvedCount = activeCerts;
+  const pendingCount = newApps;
+  const rejectedCount = stats?.statusCounts?.['Rejected'] ?? 0;
+  const totalDistribution = Math.max(approvedCount + pendingCount + rejectedCount, 1); // avoid division by zero
 
-  // Partner labs breakdown
+  // Partner labs breakdown — all from real data, no dummy fallbacks
   const partnerLabs = [
     {
       id: 'LAB_1',
       name: 'Hydrochrom Analytical Services Limited',
-      samplesCount: stats?.labCounts['LAB_1'] || recentSamples.filter(s => s.receivingLabId === 'LAB_1').length || 14,
-      tat: stats?.tatPerLab['LAB_1'] || 5.2,
+      samplesCount: stats?.labCounts?.['LAB_1'] ?? recentSamples.filter(s => s.receivingLabId === 'LAB_1').length,
+      tat: stats?.tatPerLab?.['LAB_1'] ?? 0,
       status: 'Active Accreditation',
     },
     {
       id: 'LAB_2',
       name: 'SAAG Chemical Nigeria Limited (SNCL)',
-      samplesCount: stats?.labCounts['LAB_2'] || recentSamples.filter(s => s.receivingLabId === 'LAB_2').length || 9,
-      tat: stats?.tatPerLab['LAB_2'] || 6.1,
+      samplesCount: stats?.labCounts?.['LAB_2'] ?? recentSamples.filter(s => s.receivingLabId === 'LAB_2').length,
+      tat: stats?.tatPerLab?.['LAB_2'] ?? 0,
       status: 'Active Accreditation',
     },
     {
       id: 'LAB_3',
       name: 'Kazlat Public Analyst Laboratory',
-      samplesCount: stats?.labCounts['LAB_3'] || recentSamples.filter(s => s.receivingLabId === 'LAB_3').length || 6,
-      tat: stats?.tatPerLab['LAB_3'] || 4.8,
+      samplesCount: stats?.labCounts?.['LAB_3'] ?? recentSamples.filter(s => s.receivingLabId === 'LAB_3').length,
+      tat: stats?.tatPerLab?.['LAB_3'] ?? 0,
       status: 'Active Accreditation',
     },
     {
       id: 'LAB_4',
       name: 'Central Halal Laboratory',
-      samplesCount: stats?.labCounts['LAB_4'] || recentSamples.filter(s => s.receivingLabId === 'LAB_4').length || 8,
-      tat: stats?.tatPerLab['LAB_4'] || 5.0,
+      samplesCount: stats?.labCounts?.['LAB_4'] ?? recentSamples.filter(s => s.receivingLabId === 'LAB_4').length,
+      tat: stats?.tatPerLab?.['LAB_4'] ?? 0,
       status: 'Active Accreditation',
     },
   ];
@@ -282,7 +282,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 Registered Samples
               </p>
               <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#111827', margin: 0 }}>
-                {stats?.total && stats.total > 0 ? stats.total : recentSamples.length}
+                {totalApps}
               </h2>
               <div style={{ marginTop: 6, fontSize: '11px', color: '#16a34a', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 3 }}>
                 <TrendingUp size={12} />
@@ -315,7 +315,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 Under Lab Analysis
               </p>
               <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#111827', margin: 0 }}>
-                {((stats?.statusCounts['In Processing'] || 0) + (stats?.statusCounts['Sent to Lab'] || 0)) || recentSamples.filter(s => s.workflowStatus === 'In Processing' || s.workflowStatus === 'Sent to Lab').length}
+                {renewalApps}
               </h2>
               <div style={{ marginTop: 6, fontSize: '11px', color: '#d97706', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 3 }}>
                 <Clock size={12} />
@@ -348,7 +348,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 Invoices & Finance
               </p>
               <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#111827', margin: 0 }}>
-                {recentSamples.filter(s => s.invoiceNo).length || 3}
+                {recentSamples.filter(s => s.invoiceNo).length}
               </h2>
               <div style={{ marginTop: 6, fontSize: '11px', color: '#7c3aed', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 3 }}>
                 <Receipt size={12} />
@@ -381,7 +381,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 Certificates Issued
               </p>
               <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#111827', margin: 0 }}>
-                {((stats?.statusCounts['Completed'] || 0) + (stats?.statusCounts['Closed'] || 0)) || recentSamples.filter(s => s.resultStatus === 'Completed').length || 2}
+                {activeCerts}
               </h2>
               <div style={{ marginTop: 6, fontSize: '11px', color: '#16a34a', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 3 }}>
                 <TrendingUp size={12} />
@@ -684,16 +684,16 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               </div>
             </div>
 
-            {/* Certificates Breakdown Strip */}
+            {/* Certificates Breakdown Strip — driven by real data */}
             <div style={{ paddingTop: 16, borderTop: '1px solid #f1f5f9' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 600, color: '#374151', marginBottom: 12 }}>
-                <span>Certificates</span>
-                <span style={{ color: '#6b7280' }}>Total: 133</span>
+                <span>Workflow Breakdown</span>
+                <span style={{ color: '#6b7280' }}>Total: {totalApps}</span>
               </div>
 
-              {/* 3 Metric Boxes as in reference image */}
+              {/* 3 Metric Boxes driven by live status counts */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 75px), 1fr))', gap: 10 }}>
-                {/* Box 1: Green Active */}
+                {/* Box 1: Closed / Completed */}
                 <div
                   style={{
                     background: '#f0fdf4',
@@ -704,14 +704,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                   }}
                 >
                   <div style={{ fontSize: '20px', fontWeight: 800, color: '#16a34a', lineHeight: 1 }}>
-                    56
+                    {activeCerts}
                   </div>
                   <div style={{ fontSize: '10.5px', color: '#166534', marginTop: 4, fontWeight: 600 }}>
-                    Active
+                    Closed
                   </div>
                 </div>
 
-                {/* Box 2: Yellow Pending */}
+                {/* Box 2: In Processing / Sent to Lab */}
                 <div
                   style={{
                     background: '#fefce8',
@@ -722,14 +722,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                   }}
                 >
                   <div style={{ fontSize: '20px', fontWeight: 800, color: '#ca8a04', lineHeight: 1 }}>
-                    22
+                    {renewalApps}
                   </div>
                   <div style={{ fontSize: '10.5px', color: '#854d0e', marginTop: 4, fontWeight: 600 }}>
-                    In Review
+                    In Lab
                   </div>
                 </div>
 
-                {/* Box 3: Pink Expired/Renewal */}
+                {/* Box 3: Rejected */}
                 <div
                   style={{
                     background: '#fef2f2',
@@ -740,10 +740,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                   }}
                 >
                   <div style={{ fontSize: '20px', fontWeight: 800, color: '#dc2626', lineHeight: 1 }}>
-                    11
+                    {rejectedCount}
                   </div>
                   <div style={{ fontSize: '10.5px', color: '#991b1b', marginTop: 4, fontWeight: 600 }}>
-                    Due Renewal
+                    Rejected
                   </div>
                 </div>
               </div>
@@ -760,7 +760,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 </h4>
               </div>
               <span style={{ fontSize: '11px', background: '#f1f5f9', color: '#0f172a', fontWeight: 700, padding: '2px 7px', borderRadius: 6, border: '1px solid #cbd5e1' }}>
-                2 Accredited Labs
+                {partnerLabs.filter(l => l.samplesCount > 0).length || partnerLabs.length} Accredited Labs
               </span>
             </div>
 
@@ -788,7 +788,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <div style={{ fontSize: '13px', fontWeight: 800, color: '#0f172a' }}>
-                      {lab.tat}d
+                      {lab.tat > 0 ? `${lab.tat}d` : '—'}
                     </div>
                     <div style={{ fontSize: '10px', color: '#9ca3af' }}>avg TAT</div>
                   </div>
