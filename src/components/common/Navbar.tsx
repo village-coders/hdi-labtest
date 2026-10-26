@@ -152,11 +152,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </span>
             )}
           </div>
-          <p className="topbar-subtitle" style={{ fontSize: '11.5px', color: '#64748b', margin: '2px 0 0 0' }}>
-            {isLabPage
-              ? `Sample Intake, Invoices Desk, Payment Confirmations & Halal CoA Workspace • ${activeLab.email}`
-              : 'Central Laboratory Workflow, Finance & Automated Notifications Hub'}
-          </p>
+
         </div>
       </div>
 
