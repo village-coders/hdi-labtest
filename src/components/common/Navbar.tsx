@@ -118,39 +118,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             <h2 className="topbar-title" style={{ fontSize: '16.5px', fontWeight: 800, color: '#0f172a', margin: 0, letterSpacing: '-0.2px' }}>
               {isLabPage ? activeLab.name : 'Sample Registration & Dispatch Portal'}
             </h2>
-            {isLabPage ? (
-              <span
-                className="topbar-badge"
-                style={{
-                  fontSize: '10.5px',
-                  fontWeight: 800,
-                  padding: '2px 8px',
-                  borderRadius: 99,
-                  background: '#eff6ff',
-                  color: '#1d4ed8',
-                  border: '1px solid #bfdbfe',
-                  textTransform: 'uppercase',
-                }}
-              >
-                Accredited Testing Partner
-              </span>
-            ) : (
-              <span
-                className="topbar-badge"
-                style={{
-                  fontSize: '10.5px',
-                  fontWeight: 800,
-                  padding: '2px 8px',
-                  borderRadius: 99,
-                  background: '#f1f5f9',
-                  color: '#0f172a',
-                  border: '1px solid #cbd5e1',
-                  textTransform: 'uppercase',
-                }}
-              >
-                HDI Central Desk
-              </span>
-            )}
           </div>
 
         </div>
