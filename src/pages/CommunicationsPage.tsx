@@ -519,7 +519,7 @@ export const CommunicationsPage: React.FC = () => {
                       )}
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                       <span style={{ fontSize: '11.5px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: 4 }}>
                         <Clock size={12} />
                         {new Date(comm.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric' })}{' '}

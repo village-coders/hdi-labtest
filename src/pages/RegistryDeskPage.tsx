@@ -6,6 +6,7 @@ import { TableActionDropdown } from '../components/common/TableActionDropdown.js
 import {
   Search,
   PlusCircle,
+  History as HistoryIcon,
   Eye,
   MoreHorizontal,
   TrendingUp,
@@ -18,6 +19,7 @@ interface RegistryDeskPageProps {
   companies: Company[];
   onSelectSample: (sample: Sample) => void;
   openRegisterModal: () => void;
+  openUploadPreviousModal?: () => void;
   initialStatusTab?: 'ALL' | 'REGISTERED' | 'DISPATCHED' | 'PROCESSING' | 'COMPLETED' | 'REJECTED';
 }
 
@@ -29,6 +31,7 @@ export const RegistryDeskPage: React.FC<RegistryDeskPageProps> = ({
   companies,
   onSelectSample,
   openRegisterModal,
+  openUploadPreviousModal,
   initialStatusTab,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -87,9 +90,30 @@ export const RegistryDeskPage: React.FC<RegistryDeskPageProps> = ({
             Primary management desk for registered samples, code generation, external dispatch, and certificates
           </p>
         </div>
-        <button onClick={openRegisterModal} className="btn btn-primary" style={{ background: '#0f172a', whiteSpace: 'nowrap' }}>
-          <PlusCircle size={15} /> Register New Sample
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+          {openUploadPreviousModal && (
+            <button
+              onClick={openUploadPreviousModal}
+              className="btn btn-secondary"
+              style={{
+                background: '#ffffff',
+                border: '1px solid #cbd5e1',
+                color: '#1e293b',
+                whiteSpace: 'nowrap',
+                fontWeight: 600,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+              }}
+              title="Upload or import historical/previous sample records"
+            >
+              <HistoryIcon size={15} /> Upload Direct Samples
+            </button>
+          )}
+          <button onClick={openRegisterModal} className="btn btn-primary" style={{ background: '#0f172a', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 6 }}>
+            <PlusCircle size={15} /> Register New Sample
+          </button>
+        </div>
       </div>
 
       {/* Tabs & Search Filter Strip */}
@@ -190,6 +214,24 @@ export const RegistryDeskPage: React.FC<RegistryDeskPageProps> = ({
                     {/* Code */}
                     <td style={{ whiteSpace: 'nowrap' }}>
                       <span className="code-tag">{s.sampleCode}</span>
+                      {(s.isDirectSample || s.isHistorical) && (
+                        <span
+                          style={{
+                            fontSize: '9.5px',
+                            fontWeight: 800,
+                            padding: '2px 5px',
+                            borderRadius: 4,
+                            background: '#f1f5f9',
+                            color: '#475569',
+                            marginLeft: 6,
+                            border: '1px solid #e2e8f0',
+                            letterSpacing: '0.2px',
+                          }}
+                          title="Direct Intake / Historical Archive Record"
+                        >
+                          DIRECT
+                        </span>
+                      )}
                     </td>
 
                     {/* Sample Name — truncated */}

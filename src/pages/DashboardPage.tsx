@@ -18,6 +18,7 @@ import {
   ClipboardList,
   RotateCw,
   PlusCircle,
+  History as HistoryIcon,
   DollarSign,
   FlaskConical,
   Receipt,
@@ -28,6 +29,7 @@ interface DashboardPageProps {
   recentSamples: Sample[];
   onSelectSample: (sample: Sample) => void;
   openRegisterModal: () => void;
+  openUploadPreviousModal?: () => void;
   onNavigateToTab: (tab: string) => void;
   onRefreshData?: () => void;
   unreadCount?: number;
@@ -38,6 +40,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   recentSamples,
   onSelectSample,
   openRegisterModal,
+  openUploadPreviousModal,
   onNavigateToTab,
   onRefreshData,
   unreadCount = 2,
@@ -154,7 +157,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           </p>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
           {/* Notification Bell */}
           <button
             onClick={() => onNavigateToTab('notifications')}
@@ -199,20 +202,47 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
           {/* Admin: Register Sample CTA */}
           {isAdmin && (
-            <button
-              onClick={openRegisterModal}
-              className="btn btn-primary"
-              style={{
-                background: '#0f172a',
-                padding: '8px 16px',
-                fontSize: '12.5px',
-                borderRadius: 8,
-                boxShadow: '0 2px 6px rgba(15, 23, 42, 0.25)',
-              }}
-            >
-              <PlusCircle size={14} />
-              <span>Register Sample</span>
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+              {openUploadPreviousModal && (
+                <button
+                  onClick={openUploadPreviousModal}
+                  className="btn btn-secondary"
+                  style={{
+                    padding: '8px 14px',
+                    fontSize: '12.5px',
+                    borderRadius: 8,
+                    background: '#ffffff',
+                    border: '1px solid #cbd5e1',
+                    color: '#1e293b',
+                    fontWeight: 600,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6,
+                  }}
+                  title="Upload or import past completed samples to update dashboard analytics"
+                >
+                  <HistoryIcon size={14} />
+                  <span>Upload Direct Samples</span>
+                </button>
+              )}
+              <button
+                onClick={openRegisterModal}
+                className="btn btn-primary"
+                style={{
+                  background: '#0f172a',
+                  padding: '8px 16px',
+                  fontSize: '12.5px',
+                  borderRadius: 8,
+                  boxShadow: '0 2px 6px rgba(15, 23, 42, 0.25)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6,
+                }}
+              >
+                <PlusCircle size={14} />
+                <span>Register Sample</span>
+              </button>
+            </div>
           )}
 
           {/* Lab: Go to workspace */}

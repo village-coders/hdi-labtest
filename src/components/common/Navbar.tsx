@@ -4,11 +4,6 @@ import {
   RefreshCw,
   LogOut,
   ShieldAlert,
-  FlaskConical,
-  Package,
-  Receipt,
-  CreditCard,
-  Award,
   Menu,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.js';
@@ -24,7 +19,6 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({
   currentTab = 'dashboard',
-  setCurrentTab,
   onOpenNotifications,
   unreadCount = 0,
   onRefreshData,
@@ -66,18 +60,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   const activeLabId = user?.labIdentifier || 'LAB_1';
   const activeLab = labInfoMap[activeLabId] || labInfoMap.LAB_1;
 
-  // Lab workflow tabs
-  const labTabs = [
-    { id: 'lab-portal', label: 'Overview', icon: FlaskConical },
-    { id: 'lab-intake', label: 'Sample Received', icon: Package },
-    { id: 'lab-invoices', label: 'Invoice Sent', icon: Receipt },
-    { id: 'lab-payments', label: 'Confirmed Payment', icon: CreditCard },
-    { id: 'lab-certificates', label: 'Issue Certificate', icon: Award },
-  ];
-
   return (
     <header className="topbar">
-      {/* Left: Mobile Menu Toggle + Branding & Context Title */}
+      {/* Left: Mobile Menu Toggle + Context Title */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', minWidth: 0 }}>
         {onToggleMobileSidebar && (
           <button
@@ -91,83 +76,12 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
         )}
 
-        <div
-          style={{
-            width: 38,
-            height: 38,
-            borderRadius: 10,
-            background: '#ffffff',
-            border: '1px solid #d4e4d8',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: 3,
-            flexShrink: 0,
-            boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
-          }}
-        >
-          <img
-            src="https://halalcert.com.ng/HDI/image/hcaLogo.png"
-            alt="HDI Logo"
-            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-          />
-        </div>
-
         <div style={{ minWidth: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-            <h2 className="topbar-title" style={{ fontSize: '16.5px', fontWeight: 800, color: '#0f172a', margin: 0, letterSpacing: '-0.2px' }}>
-              {isLabPage ? activeLab.name : 'Sample Registration & Dispatch Portal'}
-            </h2>
-          </div>
-
+          <h2 className="topbar-title" style={{ fontSize: '16px', fontWeight: 800, color: '#0f172a', margin: 0, letterSpacing: '-0.2px' }}>
+            {isLabPage ? activeLab.name : 'Sample Registration & Dispatch Portal'}
+          </h2>
         </div>
       </div>
-
-      {/* Center: Lab Workflow Quick Tabs (Shown on Lab Pages) */}
-      {isLabPage && setCurrentTab && (
-        <div
-          className="touch-scroll-row"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 4,
-            background: '#f8fafc',
-            padding: '4px',
-            borderRadius: 10,
-            border: '1px solid #e2e8f0',
-            maxWidth: '100%',
-          }}
-        >
-          {labTabs.map((t) => {
-            const Icon = t.icon;
-            const isActive = currentTab === t.id;
-            return (
-              <button
-                key={t.id}
-                onClick={() => setCurrentTab(t.id)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 6,
-                  padding: '5px 10px',
-                  borderRadius: 7,
-                  border: 'none',
-                  background: isActive ? '#0f172a' : 'transparent',
-                  color: isActive ? '#ffffff' : '#475569',
-                  fontSize: '11.5px',
-                  fontWeight: isActive ? 700 : 500,
-                  cursor: 'pointer',
-                  transition: 'all 0.15s ease',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                <Icon size={13} color={isActive ? '#ffffff' : '#64748b'} />
-                <span>{t.label}</span>
-              </button>
-            );
-          })}
-        </div>
-      )}
 
       {/* Right: Actions, Notifications & Profile */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 'auto', flexShrink: 0 }}>

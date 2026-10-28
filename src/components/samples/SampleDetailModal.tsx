@@ -680,7 +680,7 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
             {sample.turnaroundTimeDays ? (
               <div style={{ textAlign: 'right', background: '#ecfdf5', padding: '8px 16px', borderRadius: 10, border: '1px solid #a7f3d0' }}>
                 <span style={{ fontSize: '24px', fontWeight: 800, color: '#059669', display: 'block', lineHeight: 1.1 }}>
@@ -1249,10 +1249,11 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: 8, fontSize: '12.5px', color: '#1e293b' }}>
                 <div><strong>Sample Name:</strong> {sample.sampleName}</div>
                 <div><strong>Client Company:</strong> {sample.companyName}</div>
+                {sample.companyAddress && <div><strong>Company Address:</strong> {sample.companyAddress}</div>}
                 <div><strong>Nature / Category:</strong> {sample.sampleNature}</div>
                 <div><strong>Sample Code:</strong> <span className="code-tag">{sample.sampleCode}</span></div>
                 {sample.attachmentUrl && (
-                  <div style={{ gridColumn: '1 / -1', marginTop: 8, padding: '10px 14px', background: '#ffffff', borderRadius: 8, border: '1px solid #bae6fd', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+                  <div style={{ gridColumn: '1 / -1', marginTop: 8, padding: '10px 14px', background: '#ffffff', borderRadius: 8, border: '1px solid #bae6fd', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
                     <div>
                       <strong style={{ fontSize: '12.5px', color: '#0369a1', display: 'block' }}>Technical Specification / Batch Dossier:</strong>
                       <span style={{ fontSize: '11.5px', color: '#64748b' }}>Original manufacturer document registered with sample</span>
@@ -1273,12 +1274,19 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
 
             {/* Section B: Product Details */}
             <div style={{ background: '#f8fafc', padding: '16px', borderRadius: 12, border: '1px solid #e2e8f0', boxShadow: 'var(--shadow-sm)' }}>
-              <h4 style={{ margin: '0 0 12px 0', fontSize: '12px', fontWeight: 800, color: '#334155', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
-                Section B — Product Details
-              </h4>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                <h4 style={{ margin: 0, fontSize: '12px', fontWeight: 800, color: '#334155', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
+                  Section B — Product Details
+                </h4>
+                <span style={{ fontSize: '11px', color: '#64748b' }}>Optional Product Information</span>
+              </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: 8, fontSize: '12.5px', color: '#1e293b' }}>
                 <div><strong>Batch Number:</strong> {sample.batchNo || '—'}</div>
                 <div><strong>NAFDAC Reg No.:</strong> {sample.nafdacNo || '—'}</div>
+                {sample.sonNo && <div><strong>SON / MANCAP No.:</strong> {sample.sonNo}</div>}
+                {sample.isoNo && <div><strong>ISO Certification:</strong> {sample.isoNo}</div>}
+                {sample.barcodeNo && <div><strong>Barcode / EAN:</strong> {sample.barcodeNo}</div>}
+                {sample.otherIdentifier && <div><strong>Other Identifier:</strong> {sample.otherIdentifier}</div>}
                 <div><strong>Production Date:</strong> {sample.productionDate ? new Date(sample.productionDate).toLocaleDateString() : '—'}</div>
                 <div><strong>Expiry Date:</strong> {sample.expiryDate ? new Date(sample.expiryDate).toLocaleDateString() : '—'}</div>
               </div>

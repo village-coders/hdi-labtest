@@ -222,7 +222,7 @@ export const SummarySpreadsheet: React.FC<SummarySpreadsheetProps> = ({
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))',
             gap: 12,
           }}
         >

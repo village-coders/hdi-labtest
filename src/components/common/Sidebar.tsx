@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   LayoutDashboard,
+  Layers,
   Building2,
   FileText,
   Package,
@@ -65,7 +66,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         { id: 'registered-samples', label: 'Registered Samples', icon: ClipboardList },
         { id: 'rejected-samples', label: 'Rejected Samples', icon: AlertOctagon },
         { id: 'communications', label: 'Chats & Tickets', icon: MessageSquare },
-        { id: 'summary-reports', label: 'Summary Reports', icon: FileSpreadsheet },
+        { id: 'direct-samples', label: 'Direct Samples', icon: Layers },
       ]
     : [
         { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -75,7 +76,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         { id: 'finance', label: 'Invoices', icon: Receipt },
         { id: 'companies', label: 'Companies', icon: Building2 },
         { id: 'reports', label: 'Certificates', icon: Award },
-        { id: 'summary-reports', label: 'Summary Reports', icon: FileSpreadsheet },
+        { id: 'direct-samples', label: 'Direct Samples', icon: Layers },
         { id: 'users', label: 'Users', icon: Users },
         ...(isSuperAdmin ? [{ id: 'deleted-bin', label: 'Deleted Bin', icon: Trash2 }] : []),
       ];
@@ -91,6 +92,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   // Determine active item
   const getIsActive = (id: string) => {
     if (id === 'dashboard' && currentTab === 'dashboard') return true;
+    if (id === 'direct-samples' && (currentTab === 'direct-samples' || currentTab === 'previous-samples')) return true;
     if (id === 'registered-samples' && (currentTab === 'registered-samples' || currentTab === 'registry' || currentTab === 'applications' || currentTab === 'samples')) return true;
     if (id === 'rejected-samples' && (currentTab === 'rejected-samples' || currentTab === 'lab-rejected')) return true;
     if (id === 'lab-rejected' && (currentTab === 'lab-rejected' || currentTab === 'rejected-samples')) return true;
