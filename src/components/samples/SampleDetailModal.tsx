@@ -311,10 +311,10 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
     try {
       const updated = await api.sendOneWeekTatNotice(sample._id);
       onSampleUpdated(updated);
-      setActionSuccessMsg('✓ 1-Week TAT notice dispatched to Admin and email notification sent.');
+      setActionSuccessMsg('✓ 1-Week timeline notice dispatched to Admin and email notification sent.');
       setActiveAction(null);
     } catch (err: any) {
-      setActionErrorMsg(err.message || 'Failed to dispatch 1-week TAT notification.');
+      setActionErrorMsg(err.message || 'Failed to dispatch 1-week timeline notification.');
     } finally {
       setIsUpdating(false);
     }
@@ -476,7 +476,7 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
           label: '5. Certificate Issued',
           done: sample.resultStatus === 'Completed' || sample.workflowStatus === 'Closed',
           action: sample.resultFileUrl || sample.resultStatus === 'Completed' ? 'REPORT_RESULT_ISSUE' : 'ISSUE_CERTIFICATE',
-          hint: sample.resultFileUrl ? 'Certificate of Analysis (CoA) Issued' : (isLabUser ? 'Click to Issue Halal Certificate' : 'Awaiting Lab Certificate'),
+          hint: sample.resultFileUrl ? 'Certificate of Analysis (CoA) Issued' : (isLabUser ? 'Click to Issue Certificate of Analysis' : 'Awaiting Certificate of Analysis'),
           roleLabel: sample.resultFileUrl ? 'Registry' : 'Laboratory',
         },
       ];
@@ -681,22 +681,6 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
-            {sample.turnaroundTimeDays ? (
-              <div style={{ textAlign: 'right', background: '#ecfdf5', padding: '8px 16px', borderRadius: 10, border: '1px solid #a7f3d0' }}>
-                <span style={{ fontSize: '24px', fontWeight: 800, color: '#059669', display: 'block', lineHeight: 1.1 }}>
-                  {sample.turnaroundTimeDays}d
-                </span>
-                <span style={{ fontSize: '11px', fontWeight: 600, color: '#065f46' }}>Turnaround Time</span>
-              </div>
-            ) : (
-              <div style={{ textAlign: 'right', background: '#f8fafc', padding: '8px 16px', borderRadius: 10, border: '1px solid #e2e8f0' }}>
-                <span style={{ fontSize: '14px', fontWeight: 700, color: '#64748b', display: 'block' }}>
-                  {sample.processingDate ? 'Testing in Progress' : 'Awaiting Lab Intake'}
-                </span>
-                <span style={{ fontSize: '11px', color: '#94a3b8' }}>Turnaround Benchmarking</span>
-              </div>
-            )}
-
             {/* Super Admin: Delete Sample Button */}
             {user?.role === 'SUPER_ADMIN' && (
               <button
@@ -1302,7 +1286,7 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
                 <div><strong>Lab Identifier:</strong> {sample.receivingLabId || 'LAB_1'}</div>
                 <div><strong>Date of Entry:</strong> {new Date(sample.dateOfEntry).toLocaleDateString()}</div>
                 <div>
-                  <strong>Processing Start Date:</strong>{' '}
+                  <strong>Date Sent:</strong>{' '}
                   {sample.processingDate ? (
                     <span style={{ color: '#166534', fontWeight: 700 }}>{new Date(sample.processingDate).toLocaleDateString()}</span>
                   ) : (
@@ -1449,7 +1433,7 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
                   <div style={{ background: '#f0fdf4', border: '1px solid #86efac', padding: '10px 14px', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
                     <Bell size={16} color="#16a34a" />
                     <div>
-                      <strong style={{ fontSize: '12px', color: '#166534', display: 'block' }}>1-Week Turnaround Notice Dispatched:</strong>
+                      <strong style={{ fontSize: '12px', color: '#166534', display: 'block' }}>1-Week Analysis Timeline Notice Dispatched:</strong>
                       <span style={{ fontSize: '11.5px', color: '#15803d' }}>
                         Laboratory confirmed payment and estimated results ready by {new Date(sample.tatNoticeSentAt).toLocaleDateString()} (within 1 week).
                       </span>
@@ -1640,13 +1624,13 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
                 <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 800, color: '#0f172a' }}>
                   {activeAction === 'CONFIRM_PAYMENT' && 'Confirm Client Payment Receipt'}
                   {activeAction === 'SEND_INVOICE' && 'Submit Laboratory Invoice to Registry & Finance'}
-                  {activeAction === 'ISSUE_CERTIFICATE' && 'Upload Halal Certificate of Analysis & Complete Analysis'}
+                  {activeAction === 'ISSUE_CERTIFICATE' && 'Upload Certificate of Analysis & Complete Analysis'}
                   {activeAction === 'ACCEPT_SAMPLE' && 'Accept Physical Sample Intake & Begin Analysis'}
                   {activeAction === 'DISPATCH_SAMPLE' && 'Dispatch Sample to External Laboratory'}
                   {activeAction === 'ACKNOWLEDGE_INVOICE' && 'Acknowledge Receipt of Laboratory Invoice'}
                   {activeAction === 'SEND_PAYMENT' && 'Send Payment Confirmation & Upload Proof'}
                   {activeAction === 'REJECT_SAMPLE' && 'Reject Sample Submission'}
-                  {activeAction === 'SEND_TAT_NOTICE' && 'Dispatch 1-Week Turnaround Notice to Admin'}
+                  {activeAction === 'SEND_TAT_NOTICE' && 'Dispatch 1-Week Timeline Notice to Admin'}
                   {activeAction === 'CANNOT_TEST' && 'Notify Admin: Laboratory Cannot Perform Required Test'}
                   {activeAction === 'REPORT_RESULT_ISSUE' && 'Reject Certificate / Report Result Discrepancy to Laboratory'}
                 </h3>
@@ -1755,7 +1739,7 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
                           statusNote: `Payment confirmed received by ${sample.receivingLabName}. Ready for certificate issuance.`,
                         },
                         null,
-                        `✓ Payment confirmed! Halal certificate can now be issued.`
+                        `✓ Payment confirmed! Certificate of Analysis can now be issued.`
                       )
                     }
                     disabled={isUpdating}
@@ -1778,9 +1762,7 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
                     value={certResultStatus}
                     onChange={(e) => setCertResultStatus(e.target.value)}
                   >
-                    <option value="Completed">Completed — Halal Compliant (Pass)</option>
-                    <option value="Substandard">Substandard — Minor Non-conformity</option>
-                    <option value="Non-Compliant">Non-Compliant — Contamination Detected</option>
+                    <option value="Completed">Completed</option>
                   </select>
                 </div>
                 <div>
@@ -1808,7 +1790,11 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
                     Cancel
                   </button>
                   <button
-                    onClick={() =>
+                    onClick={() => {
+                      if (!certFile && !sample.resultFileUrl) {
+                        setActionErrorMsg('You must upload a Certificate of Analysis (PDF or image) before completing this sample.');
+                        return;
+                      }
                       handleUpdateField(
                         {
                           resultStatus: certResultStatus || 'Completed',
@@ -1818,13 +1804,13 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
                         },
                         certFile,
                         `✓ Certificate of Analysis issued and sample completed!`
-                      )
-                    }
+                      );
+                    }}
                     disabled={isUpdating}
                     className="btn btn-primary btn-sm"
                     style={{ background: '#7c3aed', borderColor: '#6d28d9', fontSize: '12.5px', padding: '6px 14px' }}
                   >
-                    <Award size={15} /> {isUpdating ? 'Issuing Certificate...' : 'Upload & Issue Halal Certificate'}
+                    <Award size={15} /> {isUpdating ? 'Issuing Certificate...' : 'Upload & Issue Certificate of Analysis'}
                   </button>
                 </div>
               </div>
@@ -1838,7 +1824,7 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
                 </p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                    <label className="form-label">Processing Start Date *</label>
+                    <label className="form-label">Date Sent *</label>
                     <input
                       type="date"
                       className="form-input"
@@ -2020,7 +2006,7 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
               </div>
             )}
 
-            {/* FORM 9: SEND 1-WEEK TAT NOTICE TO ADMIN */}
+            {/* FORM 9: SEND 1-WEEK TIMELINE NOTICE TO ADMIN */}
             {activeAction === 'SEND_TAT_NOTICE' && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                 <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', padding: '14px 16px', borderRadius: 10 }}>
@@ -2224,7 +2210,7 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
                   textDecoration: 'none',
                   padding: '6px 10px',
                 }}
-                title="Open and download Halal Certificate of Analysis (CoA)"
+                title="Open and download Certificate of Analysis (CoA)"
               >
                 <Award size={13} /> View Certificate (CoA)
               </a>

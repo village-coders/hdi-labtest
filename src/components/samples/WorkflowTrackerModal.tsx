@@ -281,10 +281,7 @@ export const WorkflowTrackerModal: React.FC<WorkflowTrackerModalProps> = ({
               {sample.workflowStatus}
             </span>
           </div>
-          <div style={{ color: 'rgba(255,255,255,0.9)' }}>
-            Turnaround Time:{' '}
-            <strong>{sample.turnaroundTimeDays ? `${sample.turnaroundTimeDays} days` : 'In Tracking'}</strong>
-          </div>
+
         </div>
       </div>
 

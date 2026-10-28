@@ -138,7 +138,7 @@ export const NotificationFeedModal: React.FC<NotificationFeedModalProps> = ({
                         color: log.status === 'SENT' ? '#166534' : '#0369a1',
                       }}
                     >
-                      {log.status === 'SENT' ? '✓ SENT (Live Email)' : 'SIMULATED (Logged)'}
+                      {log.status === 'SENT' ? '✓ SENT (via email)' : 'SIMULATED (Logged)'}
                     </span>
                     <span style={{ fontSize: '11px', color: '#94a3b8' }}>
                       {new Date(log.timestamp).toLocaleTimeString()}

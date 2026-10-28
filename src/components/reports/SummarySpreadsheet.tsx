@@ -132,7 +132,7 @@ export const SummarySpreadsheet: React.FC<SummarySpreadsheetProps> = ({
       'Invoice Acknowledged': s.invoiceAcknowledged ? 'Yes' : 'No',
       'Receipt / Ref No': s.receiptNo || 'N/A',
       'Result Status': s.resultStatus,
-      'Turnaround Time (Days)': s.turnaroundTimeDays || '—',
+      
       'Workflow Status': s.workflowStatus,
     }));
 
@@ -169,7 +169,7 @@ export const SummarySpreadsheet: React.FC<SummarySpreadsheetProps> = ({
             Summary Spreadsheet &amp; Management Review
           </h3>
           <p style={{ fontSize: '13px', color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
-            Comprehensive register with live multi-column filtering, Turnaround Time tracking, and export
+            Comprehensive register with live multi-column filtering, status tracking, and export
           </p>
         </div>
 

@@ -135,15 +135,15 @@ export const StatCards: React.FC<StatCardsProps> = ({ stats }) => {
           </div>
         </div>
 
-        {/* Average TAT */}
+        {/* Pending Intake / Action */}
         <div className="card" style={{ padding: '22px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
               <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-muted)', margin: 0 }}>
-                Average Turnaround (TAT)
+                Pending Intake &amp; Dispatch
               </p>
               <h3 style={{ fontSize: '28px', fontWeight: 800, color: '#6366f1', margin: '6px 0 0 0' }}>
-                {stats.averageTatOverall} <span style={{ fontSize: '15px', fontWeight: 600, color: '#94a3b8' }}>days</span>
+                {(stats.statusCounts['Registered'] || 0) + (stats.statusCounts['Draft'] || 0)}
               </h3>
             </div>
             <div
@@ -162,12 +162,12 @@ export const StatCards: React.FC<StatCardsProps> = ({ stats }) => {
             </div>
           </div>
           <div style={{ marginTop: 14, fontSize: '12px', color: '#64748b' }}>
-            Processing Date to Certificate Delivery
+            Awaiting lab courier &amp; intake acceptance
           </div>
         </div>
       </div>
 
-      {/* Lab Performance & TAT Breakdown Row */}
+      {/* Partner Laboratories & Volume Breakdown Row */}
       <div
         style={{
           display: 'grid',
@@ -179,7 +179,7 @@ export const StatCards: React.FC<StatCardsProps> = ({ stats }) => {
         {/* Lab TAT Leaderboard */}
         <div className="card" style={{ padding: '22px' }}>
           <h4 style={{ fontSize: '15px', fontWeight: 700, margin: '0 0 16px 0', color: 'var(--text-main)' }}>
-            Turnaround Time (TAT) per Laboratory
+            Partner Laboratory Workloads
           </h4>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {Object.entries(stats.tatPerLab).map(([labId, tat]) => {
@@ -207,9 +207,9 @@ export const StatCards: React.FC<StatCardsProps> = ({ stats }) => {
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <span style={{ fontSize: '16px', fontWeight: 800, color: tat > 10 ? '#ef4444' : '#2563eb' }}>
-                      {tat > 0 ? `${tat}d` : 'Pending'}
+                      {count}
                     </span>
-                    <span style={{ fontSize: '11px', color: '#94a3b8', display: 'block' }}>avg TAT</span>
+                    <span style={{ fontSize: '11px', color: '#94a3b8', display: 'block' }}>assigned</span>
                   </div>
                 </div>
               );
