@@ -4,6 +4,7 @@ import { Sidebar } from './components/common/Sidebar.js';
 import { Navbar } from './components/common/Navbar.js';
 import { DashboardPage } from './pages/DashboardPage.js';
 import { RegistryDeskPage } from './pages/RegistryDeskPage.js';
+import { DirectSamplesPage } from './pages/DirectSamplesPage.js';
 import { LabWorkspacePage } from './pages/LabWorkspacePage.js';
 import { FinanceDeskPage } from './pages/FinanceDeskPage.js';
 import { LoginPage } from './pages/LoginPage.js';
@@ -13,6 +14,7 @@ import { CommunicationsPage } from './pages/CommunicationsPage.js';
 import { DeletedBinPage } from './pages/DeletedBinPage.js';
 import { SummarySpreadsheet } from './components/reports/SummarySpreadsheet.js';
 import { SampleRegistrationModal } from './components/samples/SampleRegistrationModal.js';
+import { DirectSampleUploadModal, PreviousSampleUploadModal } from './components/samples/DirectSampleUploadModal.js';
 import { SampleDetailModal } from './components/samples/SampleDetailModal.js';
 import { NotificationFeedModal } from './components/notifications/NotificationFeedModal.js';
 import { api } from './services/api.js';
@@ -70,6 +72,8 @@ const MainPortal: React.FC = () => {
   const [notificationLogs, setNotificationLogs] = useState<NotificationLog[]>([]);
 
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [isUploadPreviousOpen, setIsUploadPreviousOpen] = useState(false);
+  const [uploadPreviousTab, setUploadPreviousTab] = useState<'form' | 'spreadsheet'>('form');
   const [selectedSample, setSelectedSample] = useState<Sample | null>(null);
   const [detailInitialTab, setDetailInitialTab] = useState<'details' | 'actions' | 'chat'>('details');
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
@@ -608,6 +612,26 @@ const MainPortal: React.FC = () => {
 
               {effectiveTab === 'users' && !isLabUser && <UsersPage />}
 
+              {effectiveTab === 'direct-samples' && (
+                <DirectSamplesPage
+                  samples={samples}
+                  companies={companies}
+                  onSelectSample={(s) => {
+                    setDetailInitialTab('details');
+                    setSelectedSample(s);
+                  }}
+                  openUploadDirectModal={() => {
+                    setUploadPreviousTab('form');
+                    setIsUploadPreviousOpen(true);
+                  }}
+                  openBulkUploadModal={() => {
+                    setUploadPreviousTab('spreadsheet');
+                    setIsUploadPreviousOpen(true);
+                  }}
+                  onRefreshData={loadData}
+                />
+              )}
+
               {/* Deleted Bin — Super Admin ONLY */}
               {effectiveTab === 'deleted-bin' && user?.role === 'SUPER_ADMIN' && (
                 <DeletedBinPage onRefreshData={loadData} />
@@ -646,6 +670,18 @@ const MainPortal: React.FC = () => {
         onSuccess={handleSampleCreated}
         companies={companies}
         onCompanyCreated={(newC) => setCompanies([...companies, newC])}
+      />
+
+      {/* Previous / Historical Sample Upload Modal */}
+      <DirectSampleUploadModal
+        isOpen={isUploadPreviousOpen}
+        onClose={() => setIsUploadPreviousOpen(false)}
+        onSampleRegistered={(s) => {
+          setSamples((prev) => [s, ...prev.filter((p) => p._id !== s._id)]);
+          loadData();
+        }}
+        companies={companies}
+        initialTab={uploadPreviousTab}
       />
 
       {/* Sample Detail & Actions Modal */}

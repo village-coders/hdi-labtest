@@ -43,16 +43,21 @@ export interface Sample {
   // Section A
   sampleName: string;
   companyName: string;
+  companyAddress?: string;
   sampleCode: string;
   sampleNature: string;
   pictureUrl: string;
   attachmentUrl?: string | null;
 
-  // Section B
+  // Section B (Optional Product Details)
   productionDate?: string | null;
   expiryDate?: string | null;
   batchNo?: string;
   nafdacNo?: string;
+  sonNo?: string;
+  isoNo?: string;
+  barcodeNo?: string;
+  otherIdentifier?: string;
 
   // Section C
   dateOfEntry: string;
@@ -90,6 +95,9 @@ export interface Sample {
   deletedAt?: string | null;
   deletedBy?: string | null;
   deletionReason?: string | null;
+  isDirectSample?: boolean;
+  isHistorical?: boolean;
+  suppressNotifications?: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -97,6 +105,7 @@ export interface Sample {
 export interface Company {
   _id: string;
   name: string;
+  address?: string;
   contactPerson?: string;
   email?: string;
   phone?: string;
@@ -141,4 +150,3 @@ export interface Communication {
   createdAt: string;
   updatedAt: string;
 }
-

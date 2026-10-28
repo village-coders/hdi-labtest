@@ -265,6 +265,26 @@ export const api = {
     return safeJson(res, 'Failed to permanently delete sample');
   },
 
+  // Bulk Import Historical / Previous Samples
+  async bulkImportSamples(samples: Partial<Sample>[], suppressNotifications: boolean = true): Promise<{ message: string; count: number; samples: Sample[]; errors?: string[] }> {
+    const res = await httpFetch('/api/samples/bulk-import', {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({ samples, suppressNotifications }),
+    });
+    return safeJson(res, 'Failed to import previous samples');
+  },
+
+  // Live Test Email Verification
+  async sendTestEmail(toEmail?: string): Promise<{ success: boolean; message: string }> {
+    const res = await httpFetch('/api/notifications/test-email', {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({ toEmail }),
+    });
+    return safeJson(res, 'Failed to dispatch test notification');
+  },
+
   // Companies
   async getCompanies(): Promise<Company[]> {
     const res = await httpFetch('/api/companies', {
@@ -274,11 +294,11 @@ export const api = {
     return data.companies || [];
   },
 
-  async createCompany(name: string, contactPerson?: string, email?: string, phone?: string): Promise<Company> {
+  async createCompany(name: string, contactPerson?: string, email?: string, phone?: string, address?: string): Promise<Company> {
     const res = await httpFetch('/api/companies', {
       method: 'POST',
       headers: authHeaders(),
-      body: JSON.stringify({ name, contactPerson, email, phone }),
+      body: JSON.stringify({ name, contactPerson, email, phone, address }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.message || 'Failed to add company');
