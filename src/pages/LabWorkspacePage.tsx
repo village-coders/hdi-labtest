@@ -295,6 +295,12 @@ export const LabWorkspacePage: React.FC<LabWorkspacePageProps> = ({
     const sample = labSamples.find((s) => s._id === sId);
     if (!sample) return;
 
+    // Enforce: Certificate file must be uploaded before completing
+    if (!certFile && !sample.resultFileUrl) {
+      showError('You must upload a Certificate of Analysis (PDF or image) before marking this sample as completed.');
+      return;
+    }
+
     try {
       setActionLoading(true);
       let fileUrl = '';
@@ -305,12 +311,12 @@ export const LabWorkspacePage: React.FC<LabWorkspacePageProps> = ({
 
       await api.updateSample(sId, {
         resultStatus: certResultStatus || 'Completed',
-        workflowStatus: 'Completed',
+        workflowStatus: 'Closed',
         resultFileUrl: fileUrl || sample.resultFileUrl,
         resultComments: certComments,
-        statusNote: `Halal Certificate of Analysis issued by ${activeLab.shortName}. Test Status: ${certResultStatus}.`,
+        statusNote: `Certificate of Analysis issued by ${activeLab.shortName}. Test Status: ${certResultStatus}.`,
       });
-      showSuccess(`Halal Certificate of Analysis issued for [${sample.sampleCode}]!`);
+      showSuccess(`Certificate of Analysis issued for [${sample.sampleCode}]!`);
       setCertSelectedSampleId('');
       setCertFile(null);
       if (onRefreshData) onRefreshData();
@@ -448,7 +454,7 @@ export const LabWorkspacePage: React.FC<LabWorkspacePageProps> = ({
                   Certificate of Analysis (CoA) Upload & Issuance Space
                 </h3>
                 <p style={{ fontSize: '12px', color: '#6d28d9', margin: '2px 0 0 0' }}>
-                  Directly upload the officially signed Halal Certificate of Analysis and issue test results to HDI Admin & client.
+                  Directly upload the officially signed Certificate of Analysis and issue test results to HDI Admin & client.
                 </p>
               </div>
             </div>
@@ -537,9 +543,7 @@ export const LabWorkspacePage: React.FC<LabWorkspacePageProps> = ({
                 value={certResultStatus}
                 onChange={(e) => setCertResultStatus(e.target.value)}
               >
-                <option value="Completed">Completed — Halal Compliant (Pass)</option>
-                <option value="Substandard">Substandard — Minor Non-conformity</option>
-                <option value="Non-Compliant">Non-Compliant — Contamination Detected</option>
+                <option value="Completed">Completed</option>
               </select>
             </div>
 
@@ -576,7 +580,7 @@ export const LabWorkspacePage: React.FC<LabWorkspacePageProps> = ({
               }}
             >
               <Award size={16} />
-              {actionLoading ? 'Uploading & Issuing...' : 'Upload & Issue Halal Certificate'}
+              {actionLoading ? 'Uploading & Issuing...' : 'Upload & Issue Certificate of Analysis'}
             </button>
           </div>
         </div>
@@ -590,7 +594,7 @@ export const LabWorkspacePage: React.FC<LabWorkspacePageProps> = ({
               {activeSection === 'lab-intake' && 'Step 1: Sample Received — Accept or Reject'}
               {activeSection === 'lab-invoices' && 'Step 2: Invoice Sent — Laboratory Invoicing Center'}
               {activeSection === 'lab-payments' && 'Step 3: Confirmed Payment — Verify & Confirm Receipt'}
-              {activeSection === 'lab-certificates' && 'Step 4: Issue Halal Certificate of Analysis'}
+              {activeSection === 'lab-certificates' && 'Step 4: Issue Certificate of Analysis'}
               {(activeSection === 'lab-rejected' || activeSection === 'rejected-samples') && 'Rejected Samples — Laboratory Intake Rejections'}
               {activeSection === 'lab-portal' && `All Samples Assigned to ${activeLab.name}`}
               {' '}
@@ -599,7 +603,7 @@ export const LabWorkspacePage: React.FC<LabWorkspacePageProps> = ({
               </span>
             </h3>
             <p style={{ fontSize: '12px', color: '#6b7280', margin: '2px 0 0 0' }}>
-              {activeSection === 'lab-intake' && 'Confirm that dispatched sample batches have physically arrived at your facility. Accept to begin analysis or reject substandard samples.'}
+              {activeSection === 'lab-intake' && 'Confirm that dispatched sample batches have physically arrived at your facility. Accept to begin analysis or reject unsuitable samples.'}
               {activeSection === 'lab-invoices' && 'Generate and submit invoices for testing protocols. Admin will acknowledge receipt before releasing payment.'}
               {activeSection === 'lab-payments' && 'Verify bank references and payment proof uploaded by HDI finance team, and confirm receipt.'}
               {activeSection === 'lab-certificates' && 'Upload the final signed Certificate of Analysis (CoA) and submit official analytical remarks.'}
@@ -881,7 +885,7 @@ export const LabWorkspacePage: React.FC<LabWorkspacePageProps> = ({
                 </p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#166534' }}>Processing Start Date:</label>
+                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#166534' }}>Date Sent:</label>
                     <input
                       type="date"
                       className="form-input"
@@ -1063,7 +1067,7 @@ export const LabWorkspacePage: React.FC<LabWorkspacePageProps> = ({
                 )}
               </div>
               <p style={{ fontSize: '12px', color: '#6b7280', margin: 0 }}>
-                Confirming payment will authorize the issuance of the official Halal Certificate of Analysis.
+                Confirming payment will authorize the issuance of the official Certificate of Analysis.
               </p>
             </div>
 

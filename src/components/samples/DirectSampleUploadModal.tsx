@@ -128,7 +128,7 @@ export const DirectSampleUploadModal: React.FC<DirectSampleUploadModalProps> = (
   const [receiptFileName, setReceiptFileName] = useState('');
 
   // Form State: Section 5 — Certificate of Analysis (CoA) Upload
-  const [resultStatus, setResultStatus] = useState<'Completed' | 'Substandard' | 'Non-Compliant'>('Completed');
+  const [resultStatus, setResultStatus] = useState<string>('Completed');
   const [resultComments, setResultComments] = useState('Halal compliance verified. Certified compliant.');
   const [certFile, setCertFile] = useState<File | null>(null);
   const [certFileName, setCertFileName] = useState('');
@@ -510,7 +510,7 @@ export const DirectSampleUploadModal: React.FC<DirectSampleUploadModalProps> = (
         'Receipt Number': 'RCP-2025-001',
         'Result Status': 'Completed',
         'Workflow Status': 'Closed',
-        'Comments': 'Porcine DNA: Negative (<0.01%). Ethanol: 0.00%. Halal compliant.',
+        'Comments': 'Porcine DNA: Negative (<0.01%). Ethanol: 0.00%. Completed analysis.',
       },
       {
         'Sample Name': 'Skin Nourishing Cream 250ml',
@@ -1095,9 +1095,7 @@ export const DirectSampleUploadModal: React.FC<DirectSampleUploadModalProps> = (
                     value={resultStatus}
                     onChange={(e: any) => setResultStatus(e.target.value)}
                   >
-                    <option value="Completed">Completed — Halal Compliant (Pass)</option>
-                    <option value="Substandard">Substandard — Minor Non-conformity</option>
-                    <option value="Non-Compliant">Non-Compliant — Contamination Detected</option>
+                    <option value="Completed">Completed</option>
                   </select>
                 </div>
 

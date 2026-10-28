@@ -187,7 +187,7 @@ export const DocumentsPage: React.FC<DocumentsPageProps> = ({
           Company Document Management Center
         </h2>
         <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
-          Central repository for all documents sent and received per client company — Laboratory Invoices, Bank Payment Receipts, and Halal Certificates of Analysis (CoAs).
+          Central repository for all documents sent and received per client company — Laboratory Invoices, Bank Payment Receipts, and Certificates of Analysis (CoAs).
         </p>
       </div>
 
@@ -210,7 +210,7 @@ export const DocumentsPage: React.FC<DocumentsPageProps> = ({
 
         <div className="card" style={{ padding: '16px 18px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-            <span style={{ fontSize: '11.5px', fontWeight: 600, color: '#166534' }}>Halal Certificates</span>
+            <span style={{ fontSize: '11.5px', fontWeight: 600, color: '#166534' }}>Certificates of Analysis</span>
             <Award size={18} color="#16a34a" />
           </div>
           <h3 style={{ fontSize: '26px', fontWeight: 800, color: '#16a34a', margin: 0 }}>{certsCount}</h3>
