@@ -114,16 +114,6 @@ export const WorkflowTrackerModal: React.FC<WorkflowTrackerModalProps> = ({
         },
         {
           id: 4,
-          key: 'Result Received',
-          title: 'Result & Certificate of Analysis (CoA)',
-          subtitle: sample.resultFileUrl
-            ? 'Official Certificate of Analysis uploaded'
-            : 'Awaiting CoA test report upload from laboratory',
-          icon: FileCheck,
-          role: 'External Lab QA',
-        },
-        {
-          id: 5,
           key: 'Invoiced',
           title: isLabUser ? 'Invoice Sent & Confirmed Payment' : 'Invoice Received & Paid',
           subtitle: sample.invoiceNo
@@ -133,6 +123,16 @@ export const WorkflowTrackerModal: React.FC<WorkflowTrackerModalProps> = ({
             : (isLabUser ? 'Invoice generation & billing submission' : 'Invoice received & fee settlement'),
           icon: Receipt,
           role: isLabUser ? 'Laboratory Accounts' : 'Finance Officer',
+        },
+        {
+          id: 5,
+          key: 'Result Received',
+          title: 'Result & Certificate of Analysis (CoA)',
+          subtitle: sample.resultFileUrl
+            ? 'Official Certificate of Analysis uploaded'
+            : 'Awaiting CoA test report upload from laboratory',
+          icon: FileCheck,
+          role: 'External Lab QA',
         },
         {
           id: 6,
@@ -157,18 +157,29 @@ export const WorkflowTrackerModal: React.FC<WorkflowTrackerModalProps> = ({
       Registered: 1,
       'Sent to Lab': 2,
       'In Processing': 3,
-      'Result Received': 4,
+      'Result Received': 5,
       Closed: 6,
       Rejected: -1,
     };
 
     const currentLevel = orderMap[currentWorkflow] ?? 1;
 
-    // Special condition for Invoiced step (Step 5)
-    if (stepIndex === 5) {
-      if (sample.receiptNo || sample.workflowStatus === 'Closed') return 'completed';
+    // Condition for Invoiced step (Step 4: Invoice Sent & Paid)
+    if (stepIndex === 4) {
+      if (sample.paymentConfirmedByLab || sample.receiptNo || sample.resultFileUrl || sample.workflowStatus === 'Closed' || sample.workflowStatus === 'Result Received') {
+        return 'completed';
+      }
       if (sample.invoiceNo) return 'current';
       if (currentLevel >= 3) return 'current';
+      return 'pending';
+    }
+
+    // Condition for Result & CoA step (Step 5: Certificate of Analysis)
+    if (stepIndex === 5) {
+      if (sample.resultFileUrl || sample.resultStatus === 'Completed' || sample.workflowStatus === 'Closed') {
+        return 'completed';
+      }
+      if (currentWorkflow === 'Result Received' || sample.paymentConfirmedByLab) return 'current';
       return 'pending';
     }
 
@@ -420,21 +431,7 @@ export const WorkflowTrackerModal: React.FC<WorkflowTrackerModalProps> = ({
                   </p>
 
                   {/* Specific Action Attachments in Steps */}
-                  {step.id === 4 && sample.resultFileUrl && (
-                    <div style={{ marginTop: 8 }}>
-                      <a
-                        href={sample.resultFileUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="btn btn-sm btn-secondary"
-                        style={{ fontSize: '11.5px', padding: '4px 10px', color: '#0f172a', borderColor: '#cbd5e1' }}
-                      >
-                        <ExternalLink size={12} /> View Certificate of Analysis (CoA)
-                      </a>
-                    </div>
-                  )}
-
-                  {step.id === 5 && (sample.invoiceNo || sample.receiptNo) && (
+                  {step.id === 4 && (sample.invoiceNo || sample.receiptNo) && (
                     <div style={{ marginTop: 8, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                       {sample.invoiceNo && (
                         <span style={{ fontSize: '11px', background: '#e0f2fe', color: '#0369a1', padding: '2px 8px', borderRadius: 6, fontWeight: 600 }}>
@@ -446,6 +443,20 @@ export const WorkflowTrackerModal: React.FC<WorkflowTrackerModalProps> = ({
                           Receipt: {sample.receiptNo}
                         </span>
                       )}
+                    </div>
+                  )}
+
+                  {step.id === 5 && sample.resultFileUrl && (
+                    <div style={{ marginTop: 8 }}>
+                      <a
+                        href={sample.resultFileUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="btn btn-sm btn-secondary"
+                        style={{ fontSize: '11.5px', padding: '4px 10px', color: '#0f172a', borderColor: '#cbd5e1' }}
+                      >
+                        <ExternalLink size={12} /> View Certificate of Analysis (CoA)
+                      </a>
                     </div>
                   )}
                 </div>

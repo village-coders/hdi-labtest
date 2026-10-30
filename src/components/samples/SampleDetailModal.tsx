@@ -1288,8 +1288,7 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
               </h4>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: 8, fontSize: '12.5px', color: '#1e293b' }}>
                 <div><strong>Receiving Lab:</strong> {sample.receivingLabName}</div>
-                <div><strong>Lab Identifier:</strong> {sample.receivingLabId || 'LAB_1'}</div>
-                <div><strong>Date of Entry:</strong> {new Date(sample.dateOfEntry).toLocaleDateString()}</div>
+                                <div><strong>Date of Entry:</strong> {new Date(sample.dateOfEntry).toLocaleDateString()}</div>
                 <div>
                   <strong>Date Sent (Dispatched):</strong>{' '}
                   {sample.statusHistory?.find((h) => h.status === 'Sent to Lab')?.timestamp ? (

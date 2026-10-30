@@ -171,7 +171,7 @@ export const DirectSampleUploadModal: React.FC<DirectSampleUploadModalProps> = (
     const mm = String(now.getMonth() + 1).padStart(2, '0');
     const yy = String(now.getFullYear()).slice(-2);
     const randSeq = Math.floor(100 + Math.random() * 900);
-    return `${prefix}-${form}/${mm}${yy}/Ext${randSeq}`;
+    return `${prefix}/${form}/${mm}${yy}/Ext${randSeq}`;
   };
 
   useEffect(() => {
