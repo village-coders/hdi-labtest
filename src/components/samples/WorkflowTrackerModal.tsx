@@ -170,7 +170,6 @@ export const WorkflowTrackerModal: React.FC<WorkflowTrackerModalProps> = ({
         return 'completed';
       }
       if (sample.invoiceNo) return 'current';
-      if (currentLevel >= 3) return 'current';
       return 'pending';
     }
 
@@ -183,8 +182,14 @@ export const WorkflowTrackerModal: React.FC<WorkflowTrackerModalProps> = ({
       return 'pending';
     }
 
-    if (currentWorkflow === 'Closed') {
-      return 'completed';
+    if (stepIndex === 6) {
+      if (sample.workflowStatus === 'Closed') {
+        return 'completed';
+      }
+      if (sample.resultFileUrl || sample.resultStatus === 'Completed' || currentWorkflow === 'Result Received') {
+        return 'current';
+      }
+      return 'pending';
     }
 
     if (stepIndex < currentLevel) {

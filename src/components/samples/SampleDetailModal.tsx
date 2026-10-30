@@ -1534,7 +1534,7 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
                   gap: 16,
                   maxHeight: 520,
                   overflowY: 'auto',
-                  padding: '6px 8px 6px 14px',
+                  padding: '10px 14px 10px 22px',
                 }}
               >
                 {sample.statusHistory && sample.statusHistory.length > 0 ? (
@@ -1543,18 +1543,19 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
                       key={idx}
                       style={{
                         position: 'relative',
-                        paddingLeft: 22,
+                        marginLeft: 6,
+                        paddingLeft: 24,
                         borderLeft: '2.5px solid #cbd5e1',
-                        paddingBottom: idx === sample.statusHistory!.length - 1 ? 0 : 12,
+                        paddingBottom: idx === sample.statusHistory!.length - 1 ? 0 : 14,
                       }}
                     >
                       <span
                         style={{
                           position: 'absolute',
-                          left: -7,
-                          top: 3,
-                          width: 12,
-                          height: 12,
+                          left: -8,
+                          top: 2,
+                          width: 14,
+                          height: 14,
                           borderRadius: '50%',
                           background:
                             h.status === 'Closed' || h.status === 'Result Received'
@@ -1566,7 +1567,7 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
                               : h.status === 'In Processing'
                               ? '#d97706'
                               : '#0f172a',
-                          boxShadow: '0 0 0 2.5px #ffffff, 0 1px 3px rgba(0,0,0,0.2)',
+                          boxShadow: '0 0 0 3px #ffffff, 0 1px 4px rgba(0,0,0,0.25)',
                           zIndex: 2,
                         }}
                       />
