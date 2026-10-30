@@ -664,8 +664,8 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
                     fontWeight: 700,
                     padding: '3px 10px',
                     borderRadius: 99,
-                    background: sample.sampleNature === 'Food' ? '#dcfce7' : '#e0f2fe',
-                    color: sample.sampleNature === 'Food' ? '#166534' : '#0369a1',
+                    background: sample.sampleNature?.startsWith('Food') ? '#dcfce7' : '#e0f2fe',
+                    color: sample.sampleNature?.startsWith('Food') ? '#166534' : '#0369a1',
                   }}
                 >
                   {sample.sampleNature} Category

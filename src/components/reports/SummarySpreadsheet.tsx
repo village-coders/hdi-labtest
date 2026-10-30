@@ -296,7 +296,13 @@ export const SummarySpreadsheet: React.FC<SummarySpreadsheetProps> = ({
             onChange={(e) => setNatureFilter(e.target.value)}
           >
             <option value="">All Natures (FD / NF)</option>
-            <option value="Food">Food / Beverage (FD)</option>
+            <option value="Food - Solid">Food - Solid (FD)</option>
+            <option value="Food - Liquid">Food - Liquid (FD)</option>
+            <option value="Food - Semi-Solid">Food - Semi-Solid (FD)</option>
+            <option value="Non-Food - Solid">Non-Food - Solid (NF)</option>
+            <option value="Non-Food - Liquid">Non-Food - Liquid (NF)</option>
+            <option value="Non-Food - Semi-Solid">Non-Food - Semi-Solid (NF)</option>
+            <option value="Food">All Food (FD)</option>
             <option value="Non-Food">Non-Food (NF)</option>
           </select>
         </div>
@@ -391,10 +397,10 @@ export const SummarySpreadsheet: React.FC<SummarySpreadsheetProps> = ({
                       style={{
                         fontSize: '10.5px',
                         fontWeight: 600,
-                        color: s.sampleNature.includes('Food') ? '#1d4ed8' : '#64748b',
+                        color: (s.sampleNature || '').startsWith('Food') ? '#1d4ed8' : '#64748b',
                       }}
                     >
-                      {s.sampleNature.includes('Food') ? 'FD' : 'NF'}
+                      {(s.sampleNature || '').startsWith('Food') ? 'FD' : 'NF'}
                     </span>
                   </td>
                   <td style={{ whiteSpace: 'nowrap' }}>{new Date(s.dateOfEntry).toLocaleDateString()}</td>

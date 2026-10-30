@@ -34,7 +34,7 @@ export const SampleRegistrationModal: React.FC<SampleRegistrationModalProps> = (
   const [sampleName, setSampleName] = useState('');
   const [companyName, setCompanyName] = useState('');
   const [companyAddress, setCompanyAddress] = useState('');
-  const [sampleNature, setSampleNature] = useState('Food / Beverage');
+  const [sampleNature, setSampleNature] = useState('Food - Solid');
   const [pictureUrl, setPictureUrl] = useState('');
   const [pictureFile, setPictureFile] = useState<File | null>(null);
   const [picturePreview, setPicturePreview] = useState<string>('');
@@ -80,13 +80,12 @@ export const SampleRegistrationModal: React.FC<SampleRegistrationModalProps> = (
   const [errorMsg, setErrorMsg] = useState('');
 
   const sampleNatureOptions = [
-    'Food / Beverage',
-    'Food / Dairy Products',
-    'Food / Raw Material',
-    'Food / Confectionery',
-    'Non-Food / Cleaning Chemical',
-    'Non-Food / Packaging Material',
-    'Non-Food / Water & Effluent',
+    'Food - Solid',
+    'Food - Liquid',
+    'Food - Semi-Solid',
+    'Non-Food - Solid',
+    'Non-Food - Liquid',
+    'Non-Food - Semi-Solid',
   ];
 
   const analysisOptions = [
@@ -175,7 +174,7 @@ export const SampleRegistrationModal: React.FC<SampleRegistrationModalProps> = (
       const mm = String(d.getMonth() + 1).padStart(2, '0');
       const yy = String(d.getFullYear()).slice(-2);
       const prefix =
-        sampleNature.toLowerCase().includes('food') || sampleNature.toLowerCase().includes('beverage')
+        sampleNature.startsWith('Food')
           ? 'FD'
           : 'NF';
       setSampleCode(`${prefix}/${mm}${yy}/Ext---`);
