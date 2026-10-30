@@ -209,7 +209,12 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
     if (isOpen && sample) {
       setActionSuccessMsg('');
       setActionErrorMsg('');
-      setProcessingDateInput(new Date().toISOString().split('T')[0]);
+      // Pick the date sent automatically (dispatched date or entry date)
+      const sentEvent = sample.statusHistory?.find((h) => h.status === 'Sent to Lab');
+      const autoSentDate = sentEvent?.timestamp
+        ? new Date(sentEvent.timestamp).toISOString().split('T')[0]
+        : (sample.dateOfEntry ? new Date(sample.dateOfEntry).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]);
+      setProcessingDateInput(autoSentDate);
 
       // Pre-fill invoice defaults if empty
       if (!sample.invoiceNo) {
@@ -1527,10 +1532,10 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: 12,
-                  maxHeight: 460,
+                  gap: 16,
+                  maxHeight: 520,
                   overflowY: 'auto',
-                  paddingRight: 6,
+                  padding: '6px 8px 6px 14px',
                 }}
               >
                 {sample.statusHistory && sample.statusHistory.length > 0 ? (
@@ -1539,18 +1544,18 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
                       key={idx}
                       style={{
                         position: 'relative',
-                        paddingLeft: 18,
-                        borderLeft: '2px solid #cbd5e1',
-                        paddingBottom: idx === sample.statusHistory!.length - 1 ? 0 : 8,
+                        paddingLeft: 22,
+                        borderLeft: '2.5px solid #cbd5e1',
+                        paddingBottom: idx === sample.statusHistory!.length - 1 ? 0 : 12,
                       }}
                     >
                       <span
                         style={{
                           position: 'absolute',
-                          left: -6,
-                          top: 4,
-                          width: 10,
-                          height: 10,
+                          left: -7,
+                          top: 3,
+                          width: 12,
+                          height: 12,
                           borderRadius: '50%',
                           background:
                             h.status === 'Closed' || h.status === 'Result Received'
@@ -1562,7 +1567,8 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
                               : h.status === 'In Processing'
                               ? '#d97706'
                               : '#0f172a',
-                          boxShadow: '0 0 0 2px #ffffff',
+                          boxShadow: '0 0 0 2.5px #ffffff, 0 1px 3px rgba(0,0,0,0.2)',
+                          zIndex: 2,
                         }}
                       />
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
@@ -1836,13 +1842,17 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
                 </p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                    <label className="form-label">Date Accepted & Analysis Started *</label>
+                    <label className="form-label">
+                      Date Sent (Auto-Picked) *
+                    </label>
                     <input
                       type="date"
                       className="form-input"
-                      style={{ width: 180 }}
+                      style={{ width: 180, background: '#f8fafc', color: '#475569', cursor: 'not-allowed', borderColor: '#e2e8f0', fontWeight: 600 }}
                       value={processingDateInput}
-                      onChange={(e) => setProcessingDateInput(e.target.value)}
+                      readOnly
+                      disabled
+                      title="Automatically locked to the date sample was sent"
                     />
                   </div>
                   <button
