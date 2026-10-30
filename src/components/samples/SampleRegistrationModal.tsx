@@ -184,7 +184,7 @@ export const SampleRegistrationModal: React.FC<SampleRegistrationModalProps> = (
       if (lower.includes('semi-solid')) form = 'SS';
       else if (lower.includes('liquid')) form = 'LIQ';
       else if (lower.includes('solid')) form = 'SOL';
-      setSampleCode(`${prefix}-${form}/${mm}${yy}/Ext---`);
+      setSampleCode(`${prefix}/${form}/${mm}${yy}/Ext---`);
     } finally {
       setIsGeneratingCode(false);
     }
@@ -971,7 +971,7 @@ export const SampleRegistrationModal: React.FC<SampleRegistrationModalProps> = (
               >
                 {labsList.map((lab) => (
                   <option key={lab.id} value={lab.id}>
-                    {lab.name} ({lab.id})
+                    {lab.name}
                   </option>
                 ))}
               </select>

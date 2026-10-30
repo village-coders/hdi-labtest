@@ -147,7 +147,7 @@ export const PreviousSampleUploadModal: React.FC<PreviousSampleUploadModalProps>
         if (lower.includes('semi-solid')) form = 'SS';
         else if (lower.includes('liquid')) form = 'LIQ';
         else if (lower.includes('solid')) form = 'SOL';
-        setSampleCode(`${prefix}-${form}/${mm}${yy}/Ext---`);
+        setSampleCode(`${prefix}/${form}/${mm}${yy}/Ext---`);
       }
     };
     genCode();
