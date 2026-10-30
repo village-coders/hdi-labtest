@@ -195,11 +195,16 @@ export const LabWorkspacePage: React.FC<LabWorkspacePageProps> = ({
     if (!intakeSample) return;
     try {
       setActionLoading(true);
+      const sentEvent = intakeSample.statusHistory?.find((h) => h.status === 'Sent to Lab');
+      const resolvedDate = sentEvent?.timestamp
+        ? new Date(sentEvent.timestamp).toISOString().split('T')[0]
+        : (intakeSample.dateOfEntry ? new Date(intakeSample.dateOfEntry).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]);
+
       await api.updateSample(intakeSample._id, {
-        processingDate: processingDateInput || new Date().toISOString().split('T')[0],
+        processingDate: resolvedDate,
         workflowStatus: 'In Processing',
         resultStatus: 'In Progress',
-        statusNote: `Sample accepted and logged for laboratory analysis on ${processingDateInput}`,
+        statusNote: `Sample accepted and logged for laboratory analysis on ${resolvedDate}`,
       });
       showSuccess(`Sample [${intakeSample.sampleCode}] has been accepted and moved to In Processing.`);
       setIntakeSample(null);
@@ -885,13 +890,20 @@ export const LabWorkspacePage: React.FC<LabWorkspacePageProps> = ({
                 </p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#166534' }}>Date Accepted & Analysis Started:</label>
+                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#166534' }}>Date Sent (Auto-Picked):</label>
                     <input
                       type="date"
                       className="form-input"
-                      style={{ fontSize: '12px', width: 160 }}
-                      value={processingDateInput}
-                      onChange={(e) => setProcessingDateInput(e.target.value)}
+                      style={{ fontSize: '12px', width: 160, background: '#f8fafc', color: '#475569', cursor: 'not-allowed', borderColor: '#e2e8f0', fontWeight: 600 }}
+                      value={(() => {
+                        const sentEvent = intakeSample?.statusHistory?.find((h) => h.status === 'Sent to Lab');
+                        if (sentEvent?.timestamp) return new Date(sentEvent.timestamp).toISOString().split('T')[0];
+                        if (intakeSample?.dateOfEntry) return new Date(intakeSample.dateOfEntry).toISOString().split('T')[0];
+                        return processingDateInput;
+                      })()}
+                      readOnly
+                      disabled
+                      title="Automatically set to the date sample was sent"
                     />
                   </div>
                   <button
