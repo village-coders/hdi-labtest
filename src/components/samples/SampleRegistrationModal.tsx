@@ -34,7 +34,7 @@ export const SampleRegistrationModal: React.FC<SampleRegistrationModalProps> = (
   const [sampleName, setSampleName] = useState('');
   const [companyName, setCompanyName] = useState('');
   const [companyAddress, setCompanyAddress] = useState('');
-  const [sampleNature, setSampleNature] = useState('Food / Beverage');
+  const [sampleNature, setSampleNature] = useState('Food - Solid');
   const [pictureUrl, setPictureUrl] = useState('');
   const [pictureFile, setPictureFile] = useState<File | null>(null);
   const [picturePreview, setPicturePreview] = useState<string>('');
@@ -80,19 +80,22 @@ export const SampleRegistrationModal: React.FC<SampleRegistrationModalProps> = (
   const [errorMsg, setErrorMsg] = useState('');
 
   const sampleNatureOptions = [
-    'Food / Beverage',
-    'Food / Dairy Products',
-    'Food / Raw Material',
-    'Food / Confectionery',
-    'Non-Food / Cleaning Chemical',
-    'Non-Food / Packaging Material',
-    'Non-Food / Water & Effluent',
+    'Food - Solid',
+    'Food - Liquid',
+    'Food - Semi-Solid',
+    'Non-Food - Solid',
+    'Non-Food - Liquid',
+    'Non-Food - Semi-Solid',
   ];
 
   const analysisOptions = [
     'Microbiological Analysis',
     'Proximate Analysis',
-    'Vitamins Analysis (Vitamin A, B-Group, C, D, E)',
+    'Vitamin A (Retinol)',
+    'Vitamin B-Complex (B1, B2, B3, B6, B9, B12)',
+    'Vitamin C (Ascorbic Acid)',
+    'Vitamin D (Cholecalciferol / Ergocalciferol)',
+    'Vitamin E (Tocopherol)',
     'Heavy Metals Screen (Pb, Cd, As, Hg)',
     'Pesticide Residue Analysis',
     'Physicochemical Parameters',
@@ -170,15 +173,18 @@ export const SampleRegistrationModal: React.FC<SampleRegistrationModalProps> = (
       const code = await api.getPreviewCode(dateOfEntry, sampleNature);
       setSampleCode(code);
     } catch (e) {
-      // Fallback format: [Prefix]/[Month][Year]/Ext--- (No stroke between month and year)
+      // Fallback format: [Nature-Form]/[Month][Year]/Ext--- (e.g. FD-SOL/1026/Ext---)
       const d = new Date(dateOfEntry || new Date());
       const mm = String(d.getMonth() + 1).padStart(2, '0');
       const yy = String(d.getFullYear()).slice(-2);
-      const prefix =
-        sampleNature.toLowerCase().includes('food') || sampleNature.toLowerCase().includes('beverage')
-          ? 'FD'
-          : 'NF';
-      setSampleCode(`${prefix}/${mm}${yy}/Ext---`);
+      const isFood = sampleNature.startsWith('Food');
+      const prefix = isFood ? 'FD' : 'NF';
+      let form = 'SOL';
+      const lower = sampleNature.toLowerCase();
+      if (lower.includes('semi-solid')) form = 'SS';
+      else if (lower.includes('liquid')) form = 'LIQ';
+      else if (lower.includes('solid')) form = 'SOL';
+      setSampleCode(`${prefix}-${form}/${mm}${yy}/Ext---`);
     } finally {
       setIsGeneratingCode(false);
     }
@@ -935,16 +941,19 @@ export const SampleRegistrationModal: React.FC<SampleRegistrationModalProps> = (
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))', gap: 16 }}>
-            {/* 10. Date of Entry */}
+            {/* 10. Date of Entry (System Locked / Non-editable) */}
             <div className="form-group">
               <label className="form-label">
-                Date of Entry <span className="required-star">*</span>
+                Date of Entry / Sent <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 400 }}>(Auto-Set)</span>
               </label>
               <input
                 type="date"
                 className="form-input"
                 value={dateOfEntry}
-                onChange={(e) => setDateOfEntry(e.target.value)}
+                readOnly
+                disabled
+                style={{ background: '#f8fafc', color: '#475569', cursor: 'not-allowed', borderColor: '#e2e8f0' }}
+                title="Date is automatically set to today and locked to maintain system integrity."
                 required
               />
             </div>

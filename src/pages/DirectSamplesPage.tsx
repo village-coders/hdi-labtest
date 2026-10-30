@@ -322,7 +322,7 @@ export const DirectSamplesPage: React.FC<DirectSamplesPageProps> = ({
             style={{ fontSize: '12px', padding: '6px 10px', width: 'auto', maxWidth: 160 }}
           >
             <option value="ALL">All Categories</option>
-            <option value="Food">Food / Food Grade</option>
+            <option value="Food">Food - Solid</option>
             <option value="Cosmetic">Cosmetics</option>
             <option value="Chemical">Chemical</option>
             <option value="Pharmaceutical">Pharmaceutical</option>

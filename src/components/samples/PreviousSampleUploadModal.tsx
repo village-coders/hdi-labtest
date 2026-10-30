@@ -46,7 +46,7 @@ export const PreviousSampleUploadModal: React.FC<PreviousSampleUploadModalProps>
   const [companyAddress, setCompanyAddress] = useState('');
   const [sampleCode, setSampleCode] = useState('');
   const [isCodeManuallyEdited, setIsCodeManuallyEdited] = useState(false);
-  const [sampleNature, setSampleNature] = useState('Food / Beverage');
+  const [sampleNature, setSampleNature] = useState('Food - Solid');
   const [dateOfEntry, setDateOfEntry] = useState(
     new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] // default to 1 month ago
   );
@@ -97,19 +97,22 @@ export const PreviousSampleUploadModal: React.FC<PreviousSampleUploadModalProps>
   const [successMsg, setSuccessMsg] = useState('');
 
   const sampleNatureOptions = [
-    'Food / Beverage',
-    'Food / Dairy Products',
-    'Food / Raw Material',
-    'Food / Confectionery',
-    'Non-Food / Cleaning Chemical',
-    'Non-Food / Packaging Material',
-    'Non-Food / Water & Effluent',
+    'Food - Solid',
+    'Food - Liquid',
+    'Food - Semi-Solid',
+    'Non-Food - Solid',
+    'Non-Food - Liquid',
+    'Non-Food - Semi-Solid',
   ];
 
   const analysisOptions = [
     'Microbiological Analysis',
     'Proximate Analysis',
-    'Vitamins Analysis (Vitamin A, B-Group, C, D, E)',
+    'Vitamin A (Retinol)',
+    'Vitamin B-Complex (B1, B2, B3, B6, B9, B12)',
+    'Vitamin C (Ascorbic Acid)',
+    'Vitamin D (Cholecalciferol / Ergocalciferol)',
+    'Vitamin E (Tocopherol)',
     'Heavy Metals Screen (Pb, Cd, As, Hg)',
     'Pesticide Residue Analysis',
     'Physicochemical Parameters',
@@ -138,8 +141,13 @@ export const PreviousSampleUploadModal: React.FC<PreviousSampleUploadModalProps>
         const d = new Date(dateOfEntry || new Date());
         const mm = String(d.getMonth() + 1).padStart(2, '0');
         const yy = String(d.getFullYear()).slice(-2);
-        const prefix = sampleNature.toLowerCase().includes('food') || sampleNature.toLowerCase().includes('beverage') ? 'FD' : 'NF';
-        setSampleCode(`${prefix}/${mm}${yy}/Ext---`);
+        const prefix = sampleNature.startsWith('Food') ? 'FD' : 'NF';
+        let form = 'SOL';
+        const lower = sampleNature.toLowerCase();
+        if (lower.includes('semi-solid')) form = 'SS';
+        else if (lower.includes('liquid')) form = 'LIQ';
+        else if (lower.includes('solid')) form = 'SOL';
+        setSampleCode(`${prefix}-${form}/${mm}${yy}/Ext---`);
       }
     };
     genCode();
@@ -235,7 +243,7 @@ export const PreviousSampleUploadModal: React.FC<PreviousSampleUploadModalProps>
             'Historical Client Company';
           const cAddr = row['Company Address'] || row['companyAddress'] || row['Address'] || '';
           const sCode = row['Sample Code'] || row['sampleCode'] || row['Code'] || '';
-          const sNature = row['Sample Nature'] || row['Nature'] || row['Category'] || 'Food / Beverage';
+          const sNature = row['Sample Nature'] || row['Nature'] || row['Category'] || 'Food - Solid';
 
           let dEntry = row['Date of Entry'] || row['Date'] || row['Registration Date'] || '';
           if (dEntry instanceof Date) {
@@ -294,7 +302,7 @@ export const PreviousSampleUploadModal: React.FC<PreviousSampleUploadModalProps>
         'Company Name': 'Crown Flour Mills Limited',
         'Company Address': 'Plot 4, Commercial Road, Apapa, Lagos',
         'Sample Code': 'FD/0825/Ext001',
-        'Sample Nature': 'Food / Raw Material',
+        'Sample Nature': 'Food - Solid',
         'Date of Entry': '2025-08-15',
         'Receiving Lab': 'Hydrochrom Analytical Services Limited',
         'Analysis Required': 'Microbiological Analysis, Proximate Analysis, Heavy Metals Screen',
@@ -309,7 +317,7 @@ export const PreviousSampleUploadModal: React.FC<PreviousSampleUploadModalProps>
         'Company Name': 'Seven-Up Bottling Company Plc',
         'Company Address': '247 Moshood Abiola Way, Ijora, Lagos',
         'Sample Code': 'FD/0925/Ext002',
-        'Sample Nature': 'Food / Beverage',
+        'Sample Nature': 'Food - Liquid',
         'Date of Entry': '2025-09-10',
         'Receiving Lab': 'SAAG Chemical Nigeria Limited (SNCL)',
         'Analysis Required': 'Preservatives (Benzoate, Sorbate), Physicochemical Parameters',

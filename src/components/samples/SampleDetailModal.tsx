@@ -664,8 +664,8 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
                     fontWeight: 700,
                     padding: '3px 10px',
                     borderRadius: 99,
-                    background: sample.sampleNature === 'Food' ? '#dcfce7' : '#e0f2fe',
-                    color: sample.sampleNature === 'Food' ? '#166534' : '#0369a1',
+                    background: sample.sampleNature?.startsWith('Food') ? '#dcfce7' : '#e0f2fe',
+                    color: sample.sampleNature?.startsWith('Food') ? '#166534' : '#0369a1',
                   }}
                 >
                   {sample.sampleNature} Category
@@ -1286,7 +1286,19 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
                 <div><strong>Lab Identifier:</strong> {sample.receivingLabId || 'LAB_1'}</div>
                 <div><strong>Date of Entry:</strong> {new Date(sample.dateOfEntry).toLocaleDateString()}</div>
                 <div>
-                  <strong>Date Sent:</strong>{' '}
+                  <strong>Date Sent (Dispatched):</strong>{' '}
+                  {sample.statusHistory?.find((h) => h.status === 'Sent to Lab')?.timestamp ? (
+                    <span style={{ color: '#1e40af', fontWeight: 700 }}>
+                      {new Date(sample.statusHistory.find((h) => h.status === 'Sent to Lab')!.timestamp).toLocaleDateString()}
+                    </span>
+                  ) : sample.workflowStatus !== 'Registered' && sample.dateOfEntry ? (
+                    <span style={{ color: '#1e40af', fontWeight: 700 }}>{new Date(sample.dateOfEntry).toLocaleDateString()}</span>
+                  ) : (
+                    <span style={{ color: '#94a3b8' }}>Awaiting Dispatch</span>
+                  )}
+                </div>
+                <div>
+                  <strong>Date Accepted &amp; Started:</strong>{' '}
                   {sample.processingDate ? (
                     <span style={{ color: '#166534', fontWeight: 700 }}>{new Date(sample.processingDate).toLocaleDateString()}</span>
                   ) : (
@@ -1824,7 +1836,7 @@ export const SampleDetailModal: React.FC<SampleDetailModalProps> = ({
                 </p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                    <label className="form-label">Date Sent *</label>
+                    <label className="form-label">Date Accepted & Analysis Started *</label>
                     <input
                       type="date"
                       className="form-input"

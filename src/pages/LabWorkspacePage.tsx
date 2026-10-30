@@ -885,7 +885,7 @@ export const LabWorkspacePage: React.FC<LabWorkspacePageProps> = ({
                 </p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#166534' }}>Date Sent:</label>
+                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#166534' }}>Date Accepted & Analysis Started:</label>
                     <input
                       type="date"
                       className="form-input"

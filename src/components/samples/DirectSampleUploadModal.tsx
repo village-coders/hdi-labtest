@@ -82,7 +82,7 @@ export const DirectSampleUploadModal: React.FC<DirectSampleUploadModalProps> = (
   const [isNewCompany, setIsNewCompany] = useState(false);
   const [customCompanyName, setCustomCompanyName] = useState('');
   const [companyAddress, setCompanyAddress] = useState('');
-  const [sampleNature, setSampleNature] = useState('Food / Food Grade');
+  const [sampleNature, setSampleNature] = useState('Food - Solid');
   const [sampleCode, setSampleCode] = useState('');
   const [dateOfEntry, setDateOfEntry] = useState(new Date().toISOString().split('T')[0]);
   const [processingDate, setProcessingDate] = useState('');
@@ -107,7 +107,11 @@ export const DirectSampleUploadModal: React.FC<DirectSampleUploadModalProps> = (
     'Heavy Metals Screen (Lead, Arsenic, Cadmium, Mercury)',
     'Microbiological Profile & Pathogen Screening',
     'Physico-Chemical Analysis (Moisture, Ash, Fat, Protein)',
-    'Vitamins Analysis (Vitamin A, B-Group, C, D, E)',
+    'Vitamin A (Retinol)',
+    'Vitamin B-Complex (B1, B2, B3, B6, B9, B12)',
+    'Vitamin C (Ascorbic Acid)',
+    'Vitamin D (Cholecalciferol / Ergocalciferol)',
+    'Vitamin E (Tocopherol)',
     'Preservatives & Synthetic Food Colors',
     'Aflatoxins & Mycotoxins Screen',
   ];
@@ -156,13 +160,18 @@ export const DirectSampleUploadModal: React.FC<DirectSampleUploadModalProps> = (
 
   // Generate standard code on modal open or nature change
   const generateNewCode = (nature: string) => {
-    const isFood = nature.toLowerCase().includes('food');
+    const isFood = nature.startsWith('Food');
     const prefix = isFood ? 'FD' : 'NF';
+    let form = 'SOL';
+    const lower = nature.toLowerCase();
+    if (lower.includes('semi-solid')) form = 'SS';
+    else if (lower.includes('liquid')) form = 'LIQ';
+    else if (lower.includes('solid')) form = 'SOL';
     const now = new Date();
     const mm = String(now.getMonth() + 1).padStart(2, '0');
     const yy = String(now.getFullYear()).slice(-2);
     const randSeq = Math.floor(100 + Math.random() * 900);
-    return `${prefix}/${mm}${yy}/Ext${randSeq}`;
+    return `${prefix}-${form}/${mm}${yy}/Ext${randSeq}`;
   };
 
   useEffect(() => {
@@ -400,7 +409,7 @@ export const DirectSampleUploadModal: React.FC<DirectSampleUploadModalProps> = (
             companyName: cName,
             companyAddress: getVal('Company Address', 'companyAddress', 'Address'),
             sampleCode: getVal('Sample Code', 'sampleCode', 'Code', 'Sample ID'),
-            sampleNature: getVal('Category', 'sampleNature', 'Nature', 'Sample Category') || 'Food / Food Grade',
+            sampleNature: getVal('Category', 'sampleNature', 'Nature', 'Sample Category') || 'Food - Solid',
             batchNo: getVal('Batch Number', 'batchNo', 'Batch', 'Batch No', 'Lot No'),
             nafdacNo: getVal('NAFDAC Reg No', 'nafdacNo', 'NAFDAC', 'Nafdac No'),
             sonNo: getVal('SON No', 'sonNo', 'SON', 'MANCAP'),
@@ -448,7 +457,7 @@ export const DirectSampleUploadModal: React.FC<DirectSampleUploadModalProps> = (
         companyName: r.companyName,
         companyAddress: r.companyAddress,
         sampleCode: r.sampleCode,
-        sampleNature: r.sampleNature || 'Food / Food Grade',
+        sampleNature: r.sampleNature || 'Food - Solid',
         batchNo: r.batchNo,
         nafdacNo: r.nafdacNo,
         sonNo: r.sonNo,
@@ -495,7 +504,7 @@ export const DirectSampleUploadModal: React.FC<DirectSampleUploadModalProps> = (
         'Company Name': 'Dangote Flour Mills Plc',
         'Company Address': '1 Commercial Road, Apapa, Lagos',
         'Sample Code': 'FD/1026/Ext001',
-        'Category': 'Food / Food Grade',
+        'Category': 'Food - Solid',
         'Batch Number': 'DFM-2025-01',
         'NAFDAC Reg No': 'A1-4821',
         'SON No': 'SON-2025-01',
@@ -766,12 +775,12 @@ export const DirectSampleUploadModal: React.FC<DirectSampleUploadModalProps> = (
                     onChange={(e) => handleNatureChange(e.target.value)}
                     required
                   >
-                    <option value="Food / Food Grade">Food / Food Grade (FD)</option>
-                    <option value="Cosmetics / Personal Care">Cosmetics / Personal Care (NF)</option>
-                    <option value="Chemical / Industrial">Chemical / Industrial (NF)</option>
-                    <option value="Pharmaceutical / Health">Pharmaceutical / Health (NF)</option>
-                    <option value="Packaging Material">Packaging Material (NF)</option>
-                    <option value="Other Non-Food">Other Non-Food (NF)</option>
+                    <option value="Food - Solid">Food - Solid (FD)</option>
+                    <option value="Food - Liquid">Food - Liquid (FD)</option>
+                    <option value="Food - Semi-Solid">Food - Semi-Solid (FD)</option>
+                    <option value="Non-Food - Solid">Non-Food - Solid (NF)</option>
+                    <option value="Non-Food - Liquid">Non-Food - Liquid (NF)</option>
+                    <option value="Non-Food - Semi-Solid">Non-Food - Semi-Solid (NF)</option>
                   </select>
                 </div>
 
