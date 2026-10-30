@@ -107,7 +107,11 @@ export const DirectSampleUploadModal: React.FC<DirectSampleUploadModalProps> = (
     'Heavy Metals Screen (Lead, Arsenic, Cadmium, Mercury)',
     'Microbiological Profile & Pathogen Screening',
     'Physico-Chemical Analysis (Moisture, Ash, Fat, Protein)',
-    'Vitamins Analysis (Vitamin A, B-Group, C, D, E)',
+    'Vitamin A (Retinol)',
+    'Vitamin B-Complex (B1, B2, B3, B6, B9, B12)',
+    'Vitamin C (Ascorbic Acid)',
+    'Vitamin D (Cholecalciferol / Ergocalciferol)',
+    'Vitamin E (Tocopherol)',
     'Preservatives & Synthetic Food Colors',
     'Aflatoxins & Mycotoxins Screen',
   ];
@@ -158,11 +162,16 @@ export const DirectSampleUploadModal: React.FC<DirectSampleUploadModalProps> = (
   const generateNewCode = (nature: string) => {
     const isFood = nature.startsWith('Food');
     const prefix = isFood ? 'FD' : 'NF';
+    let form = 'SOL';
+    const lower = nature.toLowerCase();
+    if (lower.includes('semi-solid')) form = 'SS';
+    else if (lower.includes('liquid')) form = 'LIQ';
+    else if (lower.includes('solid')) form = 'SOL';
     const now = new Date();
     const mm = String(now.getMonth() + 1).padStart(2, '0');
     const yy = String(now.getFullYear()).slice(-2);
     const randSeq = Math.floor(100 + Math.random() * 900);
-    return `${prefix}/${mm}${yy}/Ext${randSeq}`;
+    return `${prefix}-${form}/${mm}${yy}/Ext${randSeq}`;
   };
 
   useEffect(() => {

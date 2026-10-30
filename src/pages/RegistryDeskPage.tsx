@@ -193,7 +193,8 @@ export const RegistryDeskPage: React.FC<RegistryDeskPageProps> = ({
               <th style={{ whiteSpace: 'nowrap' }}>Batch No.</th>
               <th style={{ minWidth: 120 }}>Company</th>
               <th style={{ whiteSpace: 'nowrap' }}>Nature</th>
-              <th style={{ whiteSpace: 'nowrap' }}>Entry Date</th>
+              <th style={{ whiteSpace: 'nowrap' }}>Date Sent (Dispatched)</th>
+              <th style={{ whiteSpace: 'nowrap' }}>Date Accepted / Started</th>
               <th style={{ whiteSpace: 'nowrap' }}>Assigned Lab</th>
               <th style={{ whiteSpace: 'nowrap' }}>Status</th>
               <th style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>Actions</th>
@@ -202,7 +203,7 @@ export const RegistryDeskPage: React.FC<RegistryDeskPageProps> = ({
           <tbody>
             {filteredSamples.length === 0 ? (
               <tr>
-                <td colSpan={9} style={{ textAlign: 'center', padding: '36px', color: '#6b7280' }}>
+                <td colSpan={10} style={{ textAlign: 'center', padding: '36px', color: '#6b7280' }}>
                   No sample records match this view.
                 </td>
               </tr>
@@ -300,9 +301,27 @@ export const RegistryDeskPage: React.FC<RegistryDeskPageProps> = ({
                       </span>
                     </td>
 
-                    {/* Entry Date */}
+                    {/* Date Sent (Dispatched) */}
                     <td style={{ fontSize: '12.5px', color: '#475569', whiteSpace: 'nowrap', fontWeight: 500 }}>
-                      {new Date(s.dateOfEntry).toLocaleDateString()}
+                      {(() => {
+                        const sentEvent = s.statusHistory?.find((h) => h.status === 'Sent to Lab');
+                        if (sentEvent?.timestamp) return new Date(sentEvent.timestamp).toLocaleDateString();
+                        if (s.workflowStatus !== 'Registered' && s.dateOfEntry) return new Date(s.dateOfEntry).toLocaleDateString();
+                        return <span style={{ color: '#94a3b8' }}>Pending Dispatch</span>;
+                      })()}
+                    </td>
+
+                    {/* Date Accepted & Analysis Started */}
+                    <td style={{ fontSize: '12.5px', whiteSpace: 'nowrap' }}>
+                      {s.processingDate ? (
+                        <span style={{ color: '#166534', fontWeight: 700 }}>
+                          {new Date(s.processingDate).toLocaleDateString()}
+                        </span>
+                      ) : (
+                        <span style={{ color: '#b45309', fontSize: '11.5px', fontWeight: 600 }}>
+                          Pending Lab Intake
+                        </span>
+                      )}
                     </td>
 
                     {/* Lab */}

@@ -108,7 +108,11 @@ export const PreviousSampleUploadModal: React.FC<PreviousSampleUploadModalProps>
   const analysisOptions = [
     'Microbiological Analysis',
     'Proximate Analysis',
-    'Vitamins Analysis (Vitamin A, B-Group, C, D, E)',
+    'Vitamin A (Retinol)',
+    'Vitamin B-Complex (B1, B2, B3, B6, B9, B12)',
+    'Vitamin C (Ascorbic Acid)',
+    'Vitamin D (Cholecalciferol / Ergocalciferol)',
+    'Vitamin E (Tocopherol)',
     'Heavy Metals Screen (Pb, Cd, As, Hg)',
     'Pesticide Residue Analysis',
     'Physicochemical Parameters',
@@ -138,7 +142,12 @@ export const PreviousSampleUploadModal: React.FC<PreviousSampleUploadModalProps>
         const mm = String(d.getMonth() + 1).padStart(2, '0');
         const yy = String(d.getFullYear()).slice(-2);
         const prefix = sampleNature.startsWith('Food') ? 'FD' : 'NF';
-        setSampleCode(`${prefix}/${mm}${yy}/Ext---`);
+        let form = 'SOL';
+        const lower = sampleNature.toLowerCase();
+        if (lower.includes('semi-solid')) form = 'SS';
+        else if (lower.includes('liquid')) form = 'LIQ';
+        else if (lower.includes('solid')) form = 'SOL';
+        setSampleCode(`${prefix}-${form}/${mm}${yy}/Ext---`);
       }
     };
     genCode();
